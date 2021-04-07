@@ -8,8 +8,10 @@ modified = df[['ImageFrontID', 'Kon']]
 modified.columns = ['image', 'gender']
 modified['image'] = modified['image'].str.replace('A', '')
 
+
+
 #print(modified)
 
-print(df[df.gender == 'K'].shape[0])
+#print(df[df.gender == 'K'].shape[0])
 
 modified.to_csv('../data/dataset.csv', index=False, sep=';')
