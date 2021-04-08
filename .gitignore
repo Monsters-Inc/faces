@@ -1,4 +1,6 @@
 # Add ignores here
+*~
+.vscode/
 pictures/
 
 # Byte-compiled / optimized / DLL files
