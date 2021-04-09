@@ -1,5 +1,7 @@
 import os
 fldr="test_pictures"
+#import sys
+#fldr="pictures"
 #files=os.listdir(fldr)
 import numpy as np
 import cv2
@@ -13,6 +15,10 @@ alt2 = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_al
 alt_tree = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt_tree.xml')
 
 ##Kör bara en bild just nu. Gör en for-loop för att lägga in flera bilder i lista
+# img_name = sys.argv[1]
+# img = cv2.imread(fldr+ '/' + img_name + '.jpg')
+# gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
 face_crop = []
 for filename in os.listdir(fldr):
     img = cv2.imread(fldr+'/' + filename)
