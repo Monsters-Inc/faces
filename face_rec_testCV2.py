@@ -1,4 +1,5 @@
 import os
+import sys
 fldr="pictures"
 #files=os.listdir(fldr)
 
@@ -9,7 +10,8 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
 
 ##Kör bara en bild just nu. Gör en for-loop för att lägga in flera bilder i lista
-img = cv2.imread(fldr+ '/' +'008.jpg')
+img_name = sys.argv[1]
+img = cv2.imread(fldr+ '/' + img_name + '.jpg')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 face_crop = []
