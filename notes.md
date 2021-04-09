@@ -1,6 +1,7 @@
 # Notes
 * 13391 - 13395 Carl August Lundström (man utklädd till kvinna, runkare)
 * Kolla fler än en person
+* Hur gör vi med dem med 2 ansikten? Välja första? Assigna båda till samma person? Mycket spegelbilder!
 
 
 # References
