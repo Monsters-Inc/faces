@@ -5,6 +5,7 @@ pictures/
 test_pictures/
 cropped_pictures/
 processed/
+processed_test_pictures/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
