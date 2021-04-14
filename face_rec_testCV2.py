@@ -19,7 +19,7 @@ from sklearn.metrics import confusion_matrix
 
 
 
-fldr="test_pictures"
+fldr="processed_test_pictures"
 df = pd.read_csv('data/dataset.csv', sep=';')
 
 ##Import cascade files for the classifier
@@ -36,7 +36,7 @@ alt_tree = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalfac
 face_crop = []
 genders = []
 ages = []
-
+wrongs = 0
 ##Try the different haarcascade files to see which
 for filename in os.listdir(fldr):
     img = cv2.imread(fldr+'/' + filename)
@@ -95,9 +95,11 @@ for filename in os.listdir(fldr):
         face_crop.append(img_resized)
 
     else:
-        print('ERROR')
-        print(filename)
-
+        wrongs +=1
+        #print('ERROR')
+        #print(filename)
+print('WRONGS: ')
+print(wrongs)
 print('WOMEN:')
 print(genders.count(1))
 print('MEN:')
@@ -257,3 +259,4 @@ print("end")
 
 ## Current issues: don't detect all profile pictures and it cases it does, 
 ## it falsely crops out the ear instead of the face
+## Found pant instead of face....

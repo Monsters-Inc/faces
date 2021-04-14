@@ -3,6 +3,7 @@
 .vscode/
 pictures/
 test_pictures/
+processed_test_pictures/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
