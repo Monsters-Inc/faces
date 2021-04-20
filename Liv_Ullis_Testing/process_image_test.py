@@ -25,7 +25,6 @@ def clahe_with_gender_division(start_path):
     women_max_count = df['gender'].value_counts().K
     
     for filename in os.listdir(start_path):
-        print(filename)
         row = df.loc[df['image'] == filename]
         gender = row['gender'].values[0]
         
@@ -39,10 +38,6 @@ def clahe_with_gender_division(start_path):
         elif gender == 'M' and men_count < women_max_count:
             men_count+=1
             clahe(filename)
-    print('MEN:')
-    print(men_count)
-    print('WOMEN:')
-    print(women_count)
 clahe_with_gender_division(start_path)
 #str(index)+'.jpg'
 #clahe(start_path)s
