@@ -6,7 +6,10 @@ test_pictures/
 cropped_pictures/
 processed/
 processed_test_pictures/
-ulrikas_computer_processed
+Age_sex_detection.h5/
+wrong_faces/
+
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
