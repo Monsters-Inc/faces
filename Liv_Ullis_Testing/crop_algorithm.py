@@ -3,12 +3,12 @@ import numpy as np
 import pandas as pd
 import os
 
-start_path = '../processed_test_pictures/'
-end_path = '../cropped_faces/'
-wrong_path = '../wrong_faces/'
+start_path = 'processed_age_and_gender_pictures/'
+end_path = 'cropped_faces/'
+wrong_path = 'wrong_faces/'
 
-
-#img = cv2.imread(start_path+filename, 1)
+# for f in os.listdir(end_path):
+#     os.remove(f)
 
 ##Import cascade files for the classifier
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -58,7 +58,6 @@ for filename in os.listdir(start_path):
         img_resized = cv2.resize(img_cropped,(48,48))
         
         print(end_path+filename)
-        #print(img_resized)
         cv2.imwrite(end_path+filename, img_resized)
 
     else:
