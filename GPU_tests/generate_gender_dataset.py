@@ -11,19 +11,16 @@ weights = 'premade.dat'
 batch_size = 500
 
 df = pd.read_csv('../data/dataset.csv', sep=';')
+df.drop(labels=['age'], axis=1)
+df = df.drop_duplicates(subset='image')
 
-model = dlib.cnn_face_detection_model_v1(weights)
+tot_images = len(df['image'])
+if len(sys.argv) > 1:
+  tot_images = int(sys.argv[1])
+
 data = []
 
-def getKey():
-  key = cv2.waitKey(0)
-  cv2.destroyAllWindows()
-
-  if key== ord('m'):
-    return 'M'
-  else:
-    return 'K'
-
+model = dlib.cnn_face_detection_model_v1(weights)
 
 
 def process_batch(start_index, end_index):
@@ -42,12 +39,12 @@ def process_batch(start_index, end_index):
   processed = model(images, 0, 30)
 
   for i in range(len(processed)):
-
-    dataframe_index = i + start_index
+    if len(processed[i]) > 1:
+      continue
 
     for j, face in enumerate(processed[i]):
-      l = face.rect.left()
       t = face.rect.top()
+      l = face.rect.left()
       r = face.rect.right()
       b = face.rect.bottom()
 
@@ -56,26 +53,16 @@ def process_batch(start_index, end_index):
       r = max(0, r)
       b = max(0, b)
 
+      dataframe_index = i + start_index
       image = images[i]
+      data.append([df['image'][dataframe_index], df['gender'][dataframe_index]])
+    
+      name = df['image'][dataframe_index]
+
       cropped = image[t:b, l: r]
-      name = df['image'][dataframe_index][:-4]
-      name = name + '_' + str(j) + '.jpg'
-
-      isnull = df['gender'].isnull()[dataframe_index]
-      gender = df['gender'][dataframe_index]
-
-      if isnull:
-        temp = image.copy()
-        marked = cv2.rectangle(temp, (l, t), (r, b), (0, 255, 0), 2)
-        cv2.imshow(name, marked)
-        gender = getKey()
-        print('Using gender: ' + gender)
-
-      data.append([name, gender, df['age'][dataframe_index]])
       cv2.imwrite(end_path + name, cropped)
 
 
-tot_images = len(df['image'])
 frac, batches = math.modf(tot_images/batch_size)
 remainder = int(frac * batch_size) + 1
 batches = int(batches)
@@ -91,5 +78,5 @@ print('Doing ' + str(remainder_start) + ' - ' + str(remainder_stop))
 
 process_batch(remainder_start, remainder_stop)
 
-df_new = pd.DataFrame(data, columns=['image', 'gender', 'age'])
+df_new = pd.DataFrame(data, columns=['image', 'gender'])
 df_new.to_csv('data.csv', sep=';')
