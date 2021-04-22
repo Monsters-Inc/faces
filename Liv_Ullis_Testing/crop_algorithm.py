@@ -3,22 +3,14 @@ import numpy as np
 import pandas as pd
 import os
 
-<<<<<<< HEAD
-start_path = '../processed_test_pictures/'
-end_path = '../cropped_faces/'
-wrong_path = '../wrong_faces/'
-
-
-#img = cv2.imread(start_path+filename, 1)
-=======
 start_path = 'processed_age_and_gender_pictures/'
 end_path = 'cropped_faces/'
 wrong_path = 'wrong_faces/'
 
+
+# lägger till en kommentar här för att fixa skit med git -.-
 # for f in os.listdir(end_path):
 #     os.remove(f)
->>>>>>> 9ef4d0c05e70347daa0eb640fb22f8a296e5becf
-
 ##Import cascade files for the classifier
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 face_cascade_profile = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
