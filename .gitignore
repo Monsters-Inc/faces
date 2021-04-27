@@ -4,12 +4,17 @@
 *.png
 .vscode/
 pictures/
-test_pictures/
-cropped_pictures/
-processed/
-processed_test_pictures/
-Age_sex_detection.h5/
-wrong_faces/
+full_dataset/
+data/full_dataset/
+Liv_Ullis_Testing/age_sex_detection.h5/
+Liv_Ullis_Testing/age_sex_detection_full_dataset.h5/
+Liv_Ullis_Testing/age_sex_detection_full_dataset_equal.h5/
+Liv_Ullis_Testing/wrong_faces/
+Liv_Ullis_Testing/gender_cropped_faces/
+Liv_Ullis_Testing/other_pictures/
+Liv_Ullis_Testing/other_pictures_resized/
+Liv_Ullis_Testing/age_cropped_faces/
+Liv_Ullis_Testing/age_wrong_faces/
 
 
 

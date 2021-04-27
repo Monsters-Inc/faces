@@ -10,11 +10,11 @@ import seaborn as sns
 from sklearn.metrics import confusion_matrix 
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
-
 from Model_age_sex_detection import train_model
 
-fldr="cropped_faces"
-df = pd.read_csv('../data/dataset.csv', sep=';')
+fldr="other_pictures_resized"
+#df = pd.read_csv('../data/dataset.csv', sep=';')
+df = pd.read_csv('../data/full_dataset.csv', sep=';')
    
 face_crop = []
 genders = []
@@ -22,7 +22,6 @@ ages = []
 for filename in os.listdir(fldr):
     img = cv2.imread(fldr+'/' + filename)
     face_crop.append(img)
-    
     row = df.loc[df['image'] == filename]
     gender = row['gender'].values[0]
     age = row['age'].values[0]
@@ -40,7 +39,6 @@ for filename in os.listdir(fldr):
     else:
         ages.append(int(40.0))
         print('NO_AGE_ERROR')
-print(ages)
 face_crop_f = np.array(face_crop)
 genders_f = np.array(genders)
 ages_f = np.array(ages)
@@ -67,12 +65,19 @@ Y_train_2=[Y_train[:,1],Y_train[:,0]]
 Y_test_2=[Y_test[:,1],Y_test[:,0]]
 
 ##Getting the already trained model
-#Model = keras.models.load_model('Age_sex_detection.h5')
+Model = keras.models.load_model('Age_sex_detection_full_dataset_equal.h5')
 
 ##Train a new model
-Model = train_model(X_train, X_test, Y_train_2, Y_test_2)
+#Model = train_model(X_train, X_test, Y_train_2, Y_test_2)
 Model.evaluate(X_test,Y_test_2)
 pred=Model.predict(X_test)
+
+
+# labels_f_2=[labels_f[:,1],labels_f[:,0]]
+# Model.evaluate(face_crop_f_2,labels_f_2)
+# pred=Model.predict(face_crop_f_2)
+
+
 
 i=0
 Pred_l=[]
@@ -83,11 +88,11 @@ while(i<len(pred[0])):
     i+=1
 
 ##For checking which images the algorithm guessed incorrectly
-Y_test_genders = Y_test_2[0]
-Wrong_guesses_indexes = []
-for i in range(len(Pred_l)):
-    if Pred_l[i] != Y_test_genders[i][0]:
-        Wrong_guesses_indexes.append(i)
+# Y_test_genders = Y_test_2[0]
+# Wrong_guesses_indexes = []
+# for i in range(len(Pred_l)):
+#     if Pred_l[i] != Y_test_genders[i][0]:
+#         Wrong_guesses_indexes.append(i)
 
 
 # for i in Wrong_guesses_indexes:
@@ -106,17 +111,28 @@ ax.set_xlabel('Actual Age')
 ax.set_ylabel('Predicted Age')
 plt.show()
 
+# fig, ax = plt.subplots()
+# ax.scatter(labels_f_2[1], pred[1])
+# ax.plot([labels_f_2[1].min(),labels_f_2[1].max()], [labels_f_2[1].min(), labels_f_2[1].max()], 'k--', lw=4)
+# ax.set_xlabel('Actual Age')
+# ax.set_ylabel('Predicted Age')
+# plt.show()
+
 results = confusion_matrix(Y_test_2[0], Pred_l)
 print(results)
+
+# results = confusion_matrix(labels_f_2[0], Pred_l)
+# print(results)
 
 report=classification_report(Y_test_2[0], Pred_l)
 report2=classification_report(Y_test_2[1], Pred_age)
 accuracy = accuracy_score(Y_test_2[1], Pred_age)
-
-print('REPORT GENDER: ')
 print(report)
-print('ACCURACY AGE: ')
-print(accuracy)
+
+# print('REPORT GENDER: ')
+# print(report)
+# print('ACCURACY AGE: ')
+# print(accuracy)
 
 
 # def test_image(ind,images_f,images_f_2,Model):  
