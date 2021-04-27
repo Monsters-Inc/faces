@@ -3,9 +3,9 @@ import numpy as np
 import pandas as pd
 import os
 
-start_path = 'processed_age_and_gender_pictures/'
-end_path = 'cropped_faces/'
-wrong_path = 'wrong_faces/'
+start_path = 'processed_age_pictures/'
+end_path = 'age_cropped_faces/'
+wrong_path = 'age_wrong_faces/'
 
 # for f in os.listdir(end_path):
 #     os.remove(f)
