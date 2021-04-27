@@ -1,1 +1,1 @@
-# faces
+# Repository for Faces' AI module
