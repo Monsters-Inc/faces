@@ -1,0 +1,29 @@
+Test 1 - 1000 bilder
+Mean age error: 10.2
+Correct gender classifications: 873/1000
+
+Test 2 - 3000 bilder
+Mean age error: 8.695356285028023
+Correct gender classifications: 2554/3000
+
+Test 3 - 3000 bilder
+Mean age error: 8.61048839071257
+Correct gender classifications: 2554/3000
+
+Test 4 - 200 bilder M/K equal
+Mean age error: 8.568862275449101
+Correct gender classifications: 111/200
+
+Test 5 - 400 bilder M/K equal
+Mean age error: 8.834285714285715
+Correct gender classifications: 223/400
+
+Test 6 - 1000 bilder M/K equal
+Mean age error: 8.38654503990878
+Correct gender classifications: 534/1000
+
+I test 4 - 6 verkade modellen ha ett bias och klassificera alla som män. Kanske något bias i hurmodellen tränades?
+
+Test 7 - 1000 bilder M/K equal - Nya vikter
+Mean age error: 8.46412037037037
+Correct gender classifications: 539/1000
