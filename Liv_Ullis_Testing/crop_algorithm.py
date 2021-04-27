@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import os
 
+<<<<<<< HEAD
 start_path = 'processed_age_pictures/'
 end_path = 'age_cropped_faces/'
 wrong_path = 'age_wrong_faces/'
@@ -10,6 +11,16 @@ wrong_path = 'age_wrong_faces/'
 # for f in os.listdir(end_path):
 #     os.remove(f)
 
+=======
+start_path = 'processed_age_and_gender_pictures/'
+end_path = 'cropped_faces/'
+wrong_path = 'wrong_faces/'
+
+
+# lägger till en kommentar här för att fixa skit med git -.-
+# for f in os.listdir(end_path):
+#     os.remove(f)
+>>>>>>> f007ac5ec686dc2d650900ff8927a81f84f971e4
 ##Import cascade files for the classifier
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 face_cascade_profile = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
@@ -58,6 +69,13 @@ for filename in os.listdir(start_path):
         img_resized = cv2.resize(img_cropped,(48,48))
         
         print(end_path+filename)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        #print(img_resized)
+=======
+>>>>>>> 9ef4d0c05e70347daa0eb640fb22f8a296e5becf
+>>>>>>> f007ac5ec686dc2d650900ff8927a81f84f971e4
         cv2.imwrite(end_path+filename, img_resized)
 
     else:

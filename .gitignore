@@ -1,5 +1,7 @@
 # Add ignores here
 *~
+*.jpg
+*.png
 .vscode/
 pictures/
 full_dataset/
