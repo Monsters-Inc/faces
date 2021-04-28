@@ -1,37 +1,27 @@
 import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
-import { Application } from "https://deno.land/x/abc@v1.3.1/mod.ts";
+import axios from 'axios';
+import { Text, StyleSheet } from "react";
 
+//import { Application } from "https://deno.land/x/abc@v1.3.1/mod.ts";
+// import test from './server.js';
 
 function App() {
 
-// const denoPython = async () => { const cmd = Deno.run({
-//     cmd: ["python3", "../main.py"], 
-//     stdout: "piped",
-//     stderr: "piped"
-//   });
-  
-//   const output = await cmd.output() // "piped" must be set
-//   const outStr = new TextDecoder().decode(output);
-  
-//   const error = await cmd.stderrOutput();
-//   const errorStr = new TextDecoder().decode(error);
-  
-//   cmd.close(); // Don't forget to close it
-  
-//   console.log(outStr, errorStr);
-// }
+const [file, setFile] = useState(0);
 
-const test = () => {
-  console.log('FUNKADE')
+const test = async () => {
+  let res =  await axios.get('http://localhost:4000', {params: file})
 }
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <button onClick={test}>Click me!</button>
-        <p>HALLÖJSNA</p>
+        <p>Enter the image file name:</p>
+        <input type="text" placeholder="Filename" onChange={e => setFile(e.target.value)} />
+        <button onClick={test}>Predict!</button>
       </header>
     </div>
   );
