@@ -2,10 +2,9 @@ import os.path
 import pandas as pd # data
 import seaborn as sea # plotting
 import cv2 # image reading
-
 import sys
 
-print('Input from React: ', str(sys.argv[1]))
+#print('Input from React: ', str(sys.argv[1]))
 
 df = pd.read_csv('../data/dataset.csv', sep=';')
 

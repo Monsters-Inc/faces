@@ -10,9 +10,13 @@ import { Text, StyleSheet } from "react";
 function App() {
 
 const [file, setFile] = useState(0);
+const [answer, setAnswer] = useState("");
 
 const test = async () => {
   let res =  await axios.get('http://localhost:4000', {params: file})
+  console.log(res.data)
+  var gender = res.data
+  setAnswer(gender)
 }
 
   return (
@@ -22,6 +26,8 @@ const test = async () => {
         <p>Enter the image file name:</p>
         <input type="text" placeholder="Filename" onChange={e => setFile(e.target.value)} />
         <button onClick={test}>Predict!</button>
+        <p>Gender: {answer}</p>
+
       </header>
     </div>
   );
