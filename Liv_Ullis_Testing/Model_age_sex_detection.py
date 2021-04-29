@@ -52,11 +52,7 @@ def train_model(X_train, X_test, Y_train_2, Y_test_2):
     Model=model((48,48,3))
     Model.summary()
 
-<<<<<<< HEAD
     fle_s='Age_sex_detection_full_dataset_equal.h5'
-=======
-    fle_s='Age_sex_detection.h5'
->>>>>>> f007ac5ec686dc2d650900ff8927a81f84f971e4
     checkpointer = ModelCheckpoint(fle_s, monitor='val_loss',verbose=1,save_best_only=True,save_weights_only=False, mode='auto',save_freq='epoch')
     Early_stop=tf.keras.callbacks.EarlyStopping(patience=75, monitor='val_loss',restore_best_weights=True),
     callback_list=[checkpointer,Early_stop]
