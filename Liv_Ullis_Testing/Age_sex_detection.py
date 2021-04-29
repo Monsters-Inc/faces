@@ -11,8 +11,9 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 from Model_age_sex_detection import train_model
+from model import train_model
 
-fldr="other_pictures_resized"
+fldr=""
 #df = pd.read_csv('../data/dataset.csv', sep=';')
 df = pd.read_csv('../data/full_dataset.csv', sep=';')
    
@@ -65,10 +66,10 @@ Y_train_2=[Y_train[:,1],Y_train[:,0]]
 Y_test_2=[Y_test[:,1],Y_test[:,0]]
 
 ##Getting the already trained model
-Model = keras.models.load_model('Age_sex_detection_full_dataset_equal.h5')
+#Model = keras.models.load_model('Age_sex_detection_full_dataset_equal.h5')
 
 ##Train a new model
-#Model = train_model(X_train, X_test, Y_train_2, Y_test_2)
+Model = train_model(X_train, X_test, Y_train_2, Y_test_2)
 Model.evaluate(X_test,Y_test_2)
 pred=Model.predict(X_test)
 
