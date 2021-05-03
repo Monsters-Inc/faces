@@ -106,12 +106,14 @@ def resize_images(image_folder, destination_folder, size, logging):
     # Makes sure folders end with '/'
     image_folder = format_folder_name(image_folder)
     destination_folder = format_folder_name(destination_folder)
+    count = 1
     for image in images:
         if logging:
-            print('Processing: '+image)
+            print('Resizing: '+image+' | '+str(count)+'/'+str(len(images)))
         img = cv2.imread(image_folder+image)
         img = cv2.resize(img, size)
         cv2.imwrite(destination_folder+image, img)
+        count+=1
 #
 # Swap K and F with 1 and M with 0
 #
@@ -135,7 +137,7 @@ def equal_distribution_dataset(df):
 # Creates folder with equal gender distribution, only people with age in csv
 #
 
-def age_gender_division(image_folder, destination_folder, df, logging):
+def age_gender_division(image_folder, destination_folder, df, path_new_df, logging):
     men_count = 0
     women_count = 0
     df = pd.read_csv(df, sep=';')
@@ -143,16 +145,19 @@ def age_gender_division(image_folder, destination_folder, df, logging):
     df_ages = df_ages.sample(frac=1)
     women_max_count = df_ages['gender'].value_counts().K
 
+    new_df = pd.DataFrame(columns = ['image', 'gender', 'age'])
+
     image_folder = format_folder_name(image_folder)
     destination_folder = format_folder_name(destination_folder)
     
     images = os.listdir(image_folder)
+    count = 1
     for filename in images:
         if os.path.isfile(image_folder+filename):
             if '.DS_Store' in images:
                 images.remove('.DS_Store')
             if logging:
-                print('Processing: '+filename)
+                print('Age and gender dividing: '+filename+' | '+str(count)+'/'+str(len(images)))
         
             if filename in df_ages.values:
                 row = df_ages.loc[df_ages['image'] == filename]
@@ -162,15 +167,22 @@ def age_gender_division(image_folder, destination_folder, df, logging):
                 if (men_count >= women_max_count) and (women_count >= women_max_count):
                     break
                 
-                elif gender == 'K' and age:
+                elif (gender == 'K' or gender == 'F') and age:
                     img = cv2.imread(image_folder+filename, 1)
+                    new_df.append(row)
                     cv2.imwrite(destination_folder+filename, img)
                     women_count += 1
             
                 elif gender == 'M' and men_count < women_max_count and age:
                     img = cv2.imread(image_folder+filename, 1)
+                    new_df.append(row)
                     cv2.imwrite(destination_folder+filename, img)
                     men_count += 1 
+                    
+        count+=1
+                    
+    # Save new df
+    new_df.to_csv(path_new_df, sep=';')
 #
 # Grayscale transform - Preprocess
 #
