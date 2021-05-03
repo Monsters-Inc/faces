@@ -20,7 +20,8 @@ from sklearn.metrics import log_loss
 
 EPOCHS = 500
 
-def model(input_shape):
+def model():
+    input_shape=(48, 48, 3)
     inputs = Input((input_shape))
     conv_1 = Conv2D(filters=32,
             kernel_size=(3, 3),
@@ -28,7 +29,7 @@ def model(input_shape):
             strides=(1, 1),
             kernel_regularizer=l2(0.001),
             activation='relu')(inputs)
-    drop_1 = Dropout(0.3)(conv_1)
+    drop_1 = Dropout(0.1)(conv_1)
     maxp_1 = MaxPooling2D(pool_size = (2,2))(drop_1)
 
     conv_2 = Conv2D(filters=64,
@@ -76,7 +77,7 @@ def model(input_shape):
     return model
 
 def train_model(X_train, X_test, Y_train_2, Y_test_2):
-    Model=model((48,48,3))
+    Model=model()
     Model.summary()
 
     fle_s='Model_two_branches_2.h5'
