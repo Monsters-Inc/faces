@@ -98,7 +98,6 @@ def images_horizontal_halver(image_folder, destination_folder, color, logging):
 #
 # Resizes images in image_folder and writes them to destination_folder
 #
-
 def resize_images(image_folder, destination_folder, size, logging):
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
@@ -114,6 +113,7 @@ def resize_images(image_folder, destination_folder, size, logging):
         img = cv2.resize(img, size)
         cv2.imwrite(destination_folder+image, img)
         count+=1
+
 #
 # Swap K and F with 1 and M with 0
 #
