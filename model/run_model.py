@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix 
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
-from model import train_model
+from original_livullis import train_model
 
 fldr="resized_equal_distribution_pictures"
 df = pd.read_csv('../data/full_dataset.csv', sep=';')
@@ -74,6 +74,7 @@ Model.evaluate(X_test,y_test_2)
 print('Predicting:')
 pred=Model.predict(X_test)
 
+print(pred)
 
 i=0
 pred_gender=[]
@@ -103,4 +104,3 @@ mean_age_error = np.mean(pred_age_errors)
 print('Age standard error: ' + str(mean_age_error))
 #report_age=classification_report(y_test_2[1], pred_age)
 #accuracy = accuracy_score(y_test_2[1], pred_age
-

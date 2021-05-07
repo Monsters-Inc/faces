@@ -87,5 +87,3 @@ def train_model(X_train, X_test, Y_train_2, Y_test_2):
 
     Model.fit(X_train,Y_train_2,batch_size=64,validation_data=(X_test,Y_test_2),epochs=EPOCHS,callbacks=[callback_list])
     return Model
-
-

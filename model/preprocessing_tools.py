@@ -202,6 +202,28 @@ def grayscale(image_folder, destination_folder, logging):
                 count += 1
             grayscale_img = cv2.imread(image_folder+image, 0)
             cv2.imwrite(destination_folder+image, grayscale_img)
+
+#
+# BGR transform - Preprocess
+#
+def BGR(image_folder, destination_folder, logging):
+    images = os.listdir(image_folder)
+    if '.DS_Store' in images:
+        images.remove('.DS_Store')
+    # Makes sure folders end with '/'
+    image_folder = format_folder_name(image_folder)
+    destination_folder = format_folder_name(destination_folder)
+
+    count = 1
+    for image in images:
+        if os.path.isfile(image_folder+image):
+            if logging:
+                print(f'Processing: {image} ({count}/{len(images)})')
+                count += 1
+            img = cv2.imread(image_folder+image)
+            BGR_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            cv2.imwrite(destination_folder+image, BGR_img)
+
 #
 # CLAHE transforms images in image_folder and writes them to destination_folder
 #
