@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from preprocessing_tools import binarize_gender, images_to_vectors
 from keras.utils import to_categorical
 
-
+# This cannot be used in this current version of the model
 def data(dataset, image_folder, img_shape, test_size, logging):
 
     color = 1 if img_shape[2] == 3 else 0
