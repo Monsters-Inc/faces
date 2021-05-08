@@ -275,7 +275,7 @@ def canny_edges(image_folder, destination_folder, logging):
 #
 # Convert images to vectors
 #
-def images_to_vectors(images, image_folder, df, logging):
+def images_to_vectors(images, image_folder, df, color, logging):
     # Makes sure folders end with '/'
     image_folder = format_folder_name(image_folder)
 
@@ -283,7 +283,7 @@ def images_to_vectors(images, image_folder, df, logging):
     result = []
     for image in images:
     	if os.path.isfile(image_folder+image):
-    		img = cv2.imread(image_folder+image, 0)
+    		img = cv2.imread(image_folder+image, color)
 
     		result.append(img)
     	else:
