@@ -1,11 +1,12 @@
 import numpy as np
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 import cv2
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from model import train_model
-from data import data, data_final, data_final_other
+from data import data
 from sklearn.preprocessing import OneHotEncoder
 
 # Settings
@@ -19,7 +20,7 @@ batch_size = 64
 epochs = 500
 
 
-X_train, X_test, y_train, y_test = data_final_other(dataset, image_folder, img_shape, test_size, logging)
+X_train, X_test, y_train, y_test = data(dataset, image_folder, img_shape, test_size, logging)
 
 # Train a new model
 model = train_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, model_save)
@@ -27,6 +28,10 @@ model = train_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epo
 print('Evaluating model: ')
 score = model.evaluate(X_test, y_test)
 print('Test accuracy: ', score[1])
+
+f = open("results.txt", "a")
+f.write(str(score[1])+'\n')
+f.close()
 
 
 
