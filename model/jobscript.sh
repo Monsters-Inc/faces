@@ -10,19 +10,20 @@ module load OpenCV scikit-learn matplotlib
 
 echo "> Modules loaded"
 
-COUNT=5
+# Number of runs
+RUNS=10
 
-echo "> Running run_model.py ${COUNT} times"
+echo "> Running run_model.py ${RUNS} times"
 
 # The program to run
 
-for ((i=1; i<=$COUNT; i++))
+for ((i=1; i<=$RUNS; i++))
 do  
     echo "> Running ${i} program"
     python3 run_model.py
 done
 
-echo "> Counting accuracy for ${COUNT} runs:"
+echo "> Counting accuracy for ${RUNS} runs:"
 
 # Count accuracy
 python3 average_accuracy.py

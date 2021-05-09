@@ -1,17 +1,13 @@
-from tensorflow.keras.layers import Dense, MaxPooling2D, Conv2D, Dropout, Flatten, Input, Activation, Add
+from tensorflow.keras.layers import Dense, MaxPooling2D, Conv2D, Dropout, Flatten, Input
 from tensorflow.keras.models import Model
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn.model_selection import train_test_split
 
-
 def Convolution(input, filters):
-
     x = Conv2D(filters=filters, kernel_size=(3, 3), activation='relu', padding='same', strides=(1, 1), kernel_regularizer=l2(0.00015))(input)
     x = Dropout(0.2)(x)
-
     return x
-
 
 def create_model_orig(input_shape):
     inputs = Input(input_shape)

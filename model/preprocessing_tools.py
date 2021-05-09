@@ -183,6 +183,7 @@ def age_gender_division(image_folder, destination_folder, df, path_new_df, loggi
                     
     # Save new df
     new_df.to_csv(path_new_df, sep=';')
+
 #
 # Grayscale transform - Preprocess
 #
@@ -204,9 +205,30 @@ def grayscale(image_folder, destination_folder, logging):
             cv2.imwrite(destination_folder+image, grayscale_img)
 
 #
+# HE transform - Preprocess
+#
+def he(image_folder, destination_folder, logging):
+    images = os.listdir(image_folder)
+    if '.DS_Store' in images:
+        images.remove('.DS_Store')
+    # Makes sure folders end with '/'
+    image_folder = format_folder_name(image_folder)
+    destination_folder = format_folder_name(destination_folder)
+
+    count = 1
+    for image in images:
+        if os.path.isfile(image_folder+image):
+            if logging:
+                print(f'Processing: {image} ({count}/{len(images)})')
+                count += 1
+            img = cv2.imread(image_folder+image, 0)
+            he_img = cv2.equalizeHist(img)
+            cv2.imwrite(destination_folder+image, he_img)
+
+#
 # BGR transform - Preprocess
 #
-def BGR(image_folder, destination_folder, logging):
+def bgr(image_folder, destination_folder, logging):
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -225,7 +247,7 @@ def BGR(image_folder, destination_folder, logging):
             cv2.imwrite(destination_folder+image, BGR_img)
 
 #
-# CLAHE transforms images in image_folder and writes them to destination_folder
+# CLAHE - Preprocess
 #
 def clahe(image_folder, destination_folder, logging):
     images = os.listdir(image_folder)
@@ -251,7 +273,7 @@ def clahe(image_folder, destination_folder, logging):
             cv2.imwrite(destination_folder+image, clahe)
 
 #
-# Canny edges
+# Canny edges - Preprocess
 #
 def canny_edges(image_folder, destination_folder, logging):
     images = os.listdir(image_folder)

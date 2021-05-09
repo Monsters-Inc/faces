@@ -2,14 +2,7 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
-def warn(*args, **kwargs):
-    pass
-import warnings
-warnings.warn = warn
 from sklearn.model_selection import train_test_split
-from preprocessing_tools import binarize_gender, images_to_vectors
-from keras.utils import to_categorical
-from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 
 def data(dataset, image_folder, img_shape, test_size, logging):
