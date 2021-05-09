@@ -5,12 +5,10 @@ from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn.model_selection import train_test_split
 
 
-def Convolution(input_tensor, filters):
+def Convolution(input, filters):
 
-    x = Conv2D(filters=filters, kernel_size=(3, 3), padding='same',
-               strides=(1, 1), kernel_regularizer=l2(0.00015))(input_tensor)
+    x = Conv2D(filters=filters, kernel_size=(3, 3), activation='relu', padding='same', strides=(1, 1), kernel_regularizer=l2(0.00015))(input)
     x = Dropout(0.1)(x)
-    x = Activation('relu')(x)
 
     return x
 
@@ -20,28 +18,31 @@ def create_model(input_shape):
 
     x = Convolution(inputs, 16)
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
+
     x = Convolution(x, 32)
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
+
     x = Convolution(x, 64)
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
+
     x = Convolution(x, 128)
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
+
     x = Convolution(x, 256)
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
+
     x = Convolution(x, 512)
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
+
     x = Flatten()(x)
 
     x = Dense(64, activation='relu')(x)
-    x = Dense(64, activation='relu')(x)
 
     x = Dropout(0.2)(x)
-    x = Dropout(0.2)(x)
 
-    output_1 = Dense(1, activation="sigmoid", name='women_out')(x)
-    output_2 = Dense(1, activation="sigmoid", name='men_out')(x)
+    output = Dense(2, activation="sigmoid")(x)
 
-    model = Model(inputs=[inputs], outputs=[output_1, output_2])
+    model = Model(inputs=inputs, outputs=output)
     model.compile(loss=["binary_crossentropy", "binary_crossentropy"], optimizer="Adam", metrics=["accuracy"])
 
     return model
