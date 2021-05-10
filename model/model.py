@@ -9,41 +9,7 @@ def Convolution(input, filters):
     x = Dropout(0.2)(x)
     return x
 
-def create_model_orig(input_shape):
-    inputs = Input(input_shape)
-
-    x = Convolution(inputs, 16)
-    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-
-    x = Convolution(x, 32)
-    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-
-    x = Convolution(x, 64)
-    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-
-    x = Convolution(x, 128)
-    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-
-    x = Convolution(x, 256)
-    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-
-    x = Convolution(x, 512)
-    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-
-    x = Flatten()(x)
-
-    x = Dense(64, activation='relu')(x)
-
-    x = Dropout(0.2)(x)
-
-    output = Dense(2, activation="sigmoid")(x)
-
-    model = Model(inputs=inputs, outputs=output)
-    model.compile(loss=["binary_crossentropy", "binary_crossentropy"], optimizer="Adam", metrics=["accuracy"])
-
-    return model
-
-def create_model_new(input_shape):
+def create_model(input_shape):
     inputs = Input(input_shape)
 
     x = Convolution(inputs, 16)
@@ -72,14 +38,14 @@ def create_model_new(input_shape):
     output = Dense(2, activation="sigmoid")(x)
 
     model = Model(inputs=inputs, outputs=output)
-    model.compile(loss=["binary_crossentropy", "binary_crossentropy"], optimizer="Adam", metrics=["accuracy"])
+    model.compile(loss=["binary_crossentropy"], optimizer="Adam", metrics=["accuracy"])
 
     return model
 
 
 def train_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, model_save):
 
-    model = create_model_new(img_shape)
+    model = create_model(img_shape)
     #model.summary()
 
     checkpointer = ModelCheckpoint(
