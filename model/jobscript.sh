@@ -11,7 +11,7 @@ module load OpenCV scikit-learn matplotlib
 echo "> Modules loaded"
 
 # Number of runs
-RUNS=10
+RUNS=30
 
 echo "> Running run_model.py ${RUNS} times"
 

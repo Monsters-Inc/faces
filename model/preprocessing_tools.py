@@ -246,6 +246,8 @@ def bgr(image_folder, destination_folder, logging):
             BGR_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             cv2.imwrite(destination_folder+image, BGR_img)
 
+bgr('resized_96_equal_distribution_pictures', 'resized_96_equal_distribution_pictures_bgr', True)
+
 #
 # CLAHE - Preprocess
 #

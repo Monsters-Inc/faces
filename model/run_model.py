@@ -2,7 +2,7 @@ from model import train_model
 from data import data
 
 # Settings
-image_folder = "resized_96_equal_distribution_pictures"
+image_folder = "resized_96_equal_distribution_pictures_he"
 dataset = "../data/full_dataset.csv"
 test_size = 0.25
 img_shape = (96, 96, 1)
