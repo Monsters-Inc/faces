@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array
 
-def data(dataset, image_folder, img_shape, test_size, logging):
+def data(dataset, image_folder, img_shape, test_size, augumentation, logging):
     # Depending on how many channels the image is in color or not
     color = 1 if img_shape[2] == 3 else 0
 
@@ -42,27 +42,31 @@ def data(dataset, image_folder, img_shape, test_size, logging):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
 
-    datagen = ImageDataGenerator(
-        rotation_range=30,
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        #shear_range=0.2,
-        #zoom_range=0.3,
-        horizontal_flip=True,
-        fill_mode='nearest')
 
-    index = 0
-    for image in X_train:
-        x = image.reshape((1,) + image.shape)
+    if augumentation:
 
-        i = 0
-        for batch in datagen.flow(x, batch_size=1):
-            i += 1
-            X_train = np.concatenate((X_train, batch))
-            y_train = np.append(y_train, [y_train[index]], axis=0)
-            if i > 4:
-                print('done with 1 batch')
-                break
-        index+=1
+        datagen = ImageDataGenerator(
+            rotation_range=30,
+            width_shift_range=0.2,
+            height_shift_range=0.2,
+            #shear_range=0.2,
+            #zoom_range=0.3,
+            horizontal_flip=True,
+            fill_mode='nearest')
+
+        batch_size = 10
+        index = 0
+        for image in X_train:
+            x = image.reshape((1,) + image.shape)
+
+            i = 0
+            for batch in datagen.flow(x, batch_size=batch_size):
+                i += 1
+                X_train = np.concatenate((X_train, batch))
+                y_train = np.append(y_train, [y_train[index]], axis=0)
+                if i > 4:
+                    print(f'Augmentation: done with ${str(batch_size)} batch')
+                    break
+            index+=1
 
     return X_train, X_test, y_train, y_test
