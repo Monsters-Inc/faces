@@ -3,28 +3,29 @@ import numpy as np
 import pandas as pd
 import os
 
-start_path = 'processed_age_pictures/'
-end_path = 'age_cropped_faces/'
-wrong_path = 'age_wrong_faces/'
+def preprocessing(start_path, end_path)
+    # start_path = '../webb/server/uploads'
+    # end_path = '../webb/server/preprocessedUploads/'
+    #wrong_path = 'age_wrong_faces/'
 
-# for f in os.listdir(end_path):
-#     os.remove(f)
+    # for f in os.listdir(end_path):
+    #     os.remove(f)
 
-##Import cascade files for the classifier
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-face_cascade_profile = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
-eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
-alt = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt.xml')
-alt2 = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt2.xml')
-alt_tree = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt_tree.xml')
+    ##Import cascade files for the classifier
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    face_cascade_profile = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_profileface.xml')
+    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
+    alt = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt.xml')
+    alt2 = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt2.xml')
+    alt_tree = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt_tree.xml')
 
-wrongs = 0
-##Try the different haarcascade files to see which works for the picture
-for filename in os.listdir(start_path):
+    wrongs = 0
+    ##Try the different haarcascade files to see which works for the picture
+    for filename in os.listdir(start_path):
     img = cv2.imread(start_path+'/' + filename)
     gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) ## cv2.COLOR_BGR2RGB ? 
     faces = face_cascade.detectMultiScale(gray_img, 1.3, 5)
-    
+
     if len(faces) == 0:
         faces = face_cascade_profile.detectMultiScale(gray_img, 1.3, 5)
     if len(faces) == 0:
@@ -61,6 +62,7 @@ for filename in os.listdir(start_path):
         cv2.imwrite(end_path+filename, img_resized)
 
     else:
-        cv2.imwrite(wrong_path+filename, img)
+        #cv2.imwrite(wrong_path+filename, img)
         wrongs+=1
-        print('ERROR')
+        print('ERROR, WRONGS: ')
+        print(wrongs)
