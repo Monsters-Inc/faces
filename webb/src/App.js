@@ -16,22 +16,26 @@ function App() {
   const [upload, setUpload] = useState("https://pbs.twimg.com/profile_images/740272510420258817/sd2e6kJy_400x400.jpg")
   const [isImage, setIsImage] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const [showPredict, setShowPredict] = useState(false)
 
   const multipleFilesOnChange = (event) => {
     setImages(event.target.files)
-
+    let bool = true
     for (var i = 0 ; i<event.target.files.length ; i++){
       let filename = event.target.files[i].name
       if (!filename.match(/.(jpg|jpeg|png|gif)$/i)) {
         setIsImage(false)
+        setShowPredict(false)
+        bool = false
         break
       }
     }
 
-    if (isImage) {
+    if (bool) {
+      setIsImage(true)
       setUpload(URL.createObjectURL(event.target.files[0]))
+      setShowPredict(true)
     }
-    else{setIsImage(false)}
   }
 
   const sendMultipleImages = async () => {
@@ -97,12 +101,12 @@ return (
         :
         null
     }
-  <div>Number of images uploaded: {images.length}</div>
-  <div>Number of faces detected: {prediction.length}</div>
+  <div className="description">Number of images uploaded: {images.length}</div>
+  <div className="description">Number of faces detected: {prediction.length}</div>
     
     <p/>
 
-    <div>Prediction:</div>
+    <div className="description">Prediction:</div>
     {prediction.map((row, index) => ( 
   <Row >
     <Col>Image: {row[0]}</Col>
@@ -113,7 +117,7 @@ return (
 
 <p/>
 
-  <div>Faces could not be detected for:</div>
+  <div className="description">Faces could not be detected for:</div>
   {noFaceImages.map(row => ( 
   <Row >
   {row}
@@ -122,8 +126,10 @@ return (
   
   <p/>
 
+
     <input type="file" multiple name="file" className="input" onChange={multipleFilesOnChange} />
-    <button onClick={sendMultipleImages} className="button">Predict</button>
+    {showPredict ? <button onClick={sendMultipleImages} className="button">Predict</button> : <div></div>}
+    {/* <button onClick={sendMultipleImages} className="button">Predict</button> */}
 
 
     </header>

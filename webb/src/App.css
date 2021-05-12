@@ -52,6 +52,11 @@ background-color: white;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
+.description {
+  color:white;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
 .App-link {
   color: #61dafb;
 }
