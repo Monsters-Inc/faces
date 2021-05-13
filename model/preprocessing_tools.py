@@ -207,7 +207,7 @@ def grayscale(image_folder, destination_folder, logging):
 #
 # HE transform - Preprocess
 #
-def he(image_folder, destination_folder, logging):
+def he(image_folder, destination_folder, color, logging):
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -221,7 +221,7 @@ def he(image_folder, destination_folder, logging):
             if logging:
                 print(f'Processing: {image} ({count}/{len(images)})')
                 count += 1
-            img = cv2.imread(image_folder+image, 0)
+            img = cv2.imread(image_folder+image, color)
             he_img = cv2.equalizeHist(img)
             cv2.imwrite(destination_folder+image, he_img)
 

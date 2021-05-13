@@ -60,7 +60,6 @@ def train_gender_model(X_train, X_test, y_train, y_test, img_shape, batch_size, 
     model = create_model(img_shape)
     #model.summary()
 
-
     checkpointer = ModelCheckpoint(
         filepath=model_save,
         monitor=monitor,
