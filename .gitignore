@@ -6,6 +6,7 @@
 pictures/
 full_dataset/
 data/full_dataset/
+*.h5
 
 
 # Byte-compiled / optimized / DLL files
