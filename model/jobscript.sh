@@ -11,16 +11,16 @@ module load OpenCV scikit-learn matplotlib
 echo "> Modules loaded"
 
 # Number of runs
-RUNS=30
+RUNS=1
 
-echo "> Running run_model.py ${RUNS} times"
+echo "> Running train_model.py ${RUNS} times"
 
 # The program to run
 
 for ((i=1; i<=$RUNS; i++))
 do  
     echo "> Running ${i} program"
-    python3 run_model.py
+    python3 train_model.py G
 done
 
 echo "> Counting accuracy for ${RUNS} runs:"

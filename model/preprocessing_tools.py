@@ -99,19 +99,19 @@ def images_horizontal_halver(image_folder, destination_folder, color, logging):
 # Resizes images in image_folder and writes them to destination_folder
 #
 def resize_images(image_folder, destination_folder, size, logging):
-    images = os.listdir(image_folder)
-    if '.DS_Store' in images:
-        images.remove('.DS_Store')
     # Makes sure folders end with '/'
     image_folder = format_folder_name(image_folder)
     destination_folder = format_folder_name(destination_folder)
+    images = os.listdir(image_folder)
+    if '.DS_Store' in images:
+        images.remove('.DS_Store')
     count = 1
     for image in images:
         if logging:
             print('Resizing: '+image+' | '+str(count)+'/'+str(len(images)))
         img = cv2.imread(image_folder+image)
-        img = cv2.resize(img, size)
-        cv2.imwrite(destination_folder+image, img)
+        resized_img = cv2.resize(img, size)
+        cv2.imwrite(destination_folder+image, resized_img)
         count+=1
 
 #
@@ -137,7 +137,7 @@ def equal_distribution_dataset(df):
 # Creates folder with equal gender distribution, only people with age in csv
 #
 
-def age_gender_division(image_folder, destination_folder, df, path_new_df, logging):
+def age_gender_division(image_folder, destination_folder, df, path_new_df, size, logging):
     men_count = 0
     women_count = 0
     df = pd.read_csv(df, sep=';')
@@ -169,12 +169,14 @@ def age_gender_division(image_folder, destination_folder, df, path_new_df, loggi
                 
                 elif (gender == 'K' or gender == 'F') and age:
                     img = cv2.imread(image_folder+filename, 1)
+                    img = cv2.resize(img, size)
                     new_df.append(row)
                     cv2.imwrite(destination_folder+filename, img)
                     women_count += 1
             
                 elif gender == 'M' and men_count < women_max_count and age:
                     img = cv2.imread(image_folder+filename, 1)
+                    img = cv2.resize(img, size)
                     new_df.append(row)
                     cv2.imwrite(destination_folder+filename, img)
                     men_count += 1 
@@ -207,7 +209,7 @@ def grayscale(image_folder, destination_folder, logging):
 #
 # HE transform - Preprocess
 #
-def he(image_folder, destination_folder, color, logging):
+def he(image_folder, destination_folder, logging):
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -221,9 +223,11 @@ def he(image_folder, destination_folder, color, logging):
             if logging:
                 print(f'Processing: {image} ({count}/{len(images)})')
                 count += 1
-            img = cv2.imread(image_folder+image, color)
+            img = cv2.imread(image_folder+image, 0)
             he_img = cv2.equalizeHist(img)
             cv2.imwrite(destination_folder+image, he_img)
+
+he('equal_distribution_pictures/', 'he_equal_distribution_pictures/', True)
 
 #
 # BGR transform - Preprocess
@@ -245,8 +249,6 @@ def bgr(image_folder, destination_folder, logging):
             img = cv2.imread(image_folder+image)
             BGR_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             cv2.imwrite(destination_folder+image, BGR_img)
-
-bgr('resized_96_equal_distribution_pictures', 'resized_96_equal_distribution_pictures_bgr', True)
 
 #
 # CLAHE - Preprocess

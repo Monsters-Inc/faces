@@ -1,8 +1,7 @@
-from tensorflow.keras.layers import Dense, MaxPooling2D, Conv2D, Dropout, Flatten, Input, BatchNormalization
+from tensorflow.keras.layers import Dense, MaxPooling2D, Conv2D, Dropout, Flatten, Input
 from tensorflow.keras.models import Model
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
-from sklearn.model_selection import train_test_split
 from tensorflow.keras.optimizers import Adam
 
 
@@ -16,23 +15,8 @@ def Convolution(input, filters):
 def create_model(input_shape):
     inputs = Input(input_shape)
 
-    '''
-    x = Convolution(inputs, 16)
-    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-    #x = BatchNormalization(x, axis = 1)
-
-    x = Convolution(inputs, 32)
-    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-    #x = BatchNormalization(x, axis = 1)
-
-    x = Convolution(x, 64)
-    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-    '''
-    #x = BatchNormalization(x, axis = 1)
-
     x = Convolution(inputs, 128)
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-    #x = BatchNormalization(x,)
 
     x = Convolution(x, 256)
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
@@ -48,7 +32,7 @@ def create_model(input_shape):
     output = Dense(2, activation="softmax")(x)
 
     model = Model(inputs=inputs, outputs=output)
-    #opt = Adam(lr=0.1)
+
     model.compile(loss=["binary_crossentropy"],
                   optimizer='adam', metrics=["accuracy"])
 
