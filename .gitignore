@@ -1,6 +1,7 @@
 # Add ignores here
 *~
 *.jpg
+*.jpeg
 *.png
 .vscode/
 pictures/

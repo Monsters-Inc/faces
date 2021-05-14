@@ -5,11 +5,11 @@ from data import data_age, data_gender
 import numpy as np
 
 # Settings
-image_folder = "resized_96_equal_distribution_pictures"
+image_folder = "resized_96_equal_distribution_pictures_grayscale"
 full_dataset_folder = "../dataset"
 dataset = "../data/full_dataset.csv"
 test_size = 0.25
-img_shape = (96, 96, 3)
+img_shape = (96, 96, 1)
 logging = False
 gender_model_save = 'g_bw_final.h5'
 age_model_save = 'a_final.h5'
@@ -17,18 +17,19 @@ batch_size = 64
 epochs = 300
 multiple_runs = True
 monitor = 'val_loss'
-augumentation = False
+augumentation = True
+preprocessing = ['median']
 
 # train gender model
 def gender():
-    X_train, X_test, y_train, y_test = data_gender(dataset, image_folder, img_shape, test_size, augumentation, logging)
-    return X_test, y_test, train_gender_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, gender_model_save, monitor)
+    X_train, X_test, y_train, y_test = data_gender(dataset, image_folder, img_shape, test_size, preprocessing, logging)
+    return X_test, y_test, train_gender_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, augumentation, gender_model_save, monitor)
 # Train age model
 
 
 def age(equal = False):
-    X_train, X_test, y_train, y_test = data_age(dataset, full_dataset_folder, equal, img_shape, test_size, augumentation, logging)
-    return X_test, y_test, train_age_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, age_model_save, monitor)
+    X_train, X_test, y_train, y_test = data_age(dataset, full_dataset_folder, equal, img_shape, test_size, preprocessing, logging)
+    return X_test, y_test, train_age_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, augumentation, age_model_save, monitor)
 
 type_m = 'B'
 

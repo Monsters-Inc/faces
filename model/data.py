@@ -6,12 +6,12 @@ import dlib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array
-from preprocessing_tools import format_folder_name, he_single, clahe_single, canny_edges_single
+from preprocessing_tools import format_folder_name, he_single, clahe_single, canny_edges_single, median_filtering_single
 import random
 
 face_detection_model = 'premade.dat'
 
-def get_images(paths, dir_path, image_shape, logging):
+def get_images(paths, dir_path, image_shape, preprocessing, logging):
     dir_path = format_folder_name(dir_path)
     images = []
     count = 0
@@ -21,6 +21,7 @@ def get_images(paths, dir_path, image_shape, logging):
                   str(count)+'/'+str(len(paths)), end='\r')
         temp = cv2.imread(dir_path + image)
         temp = cv2.resize(temp, (image_shape[0], image_shape[1]))
+        temp = preprocess([temp], image_shape, preprocessing)
 
         images.append(temp)
         count += 1
@@ -28,7 +29,7 @@ def get_images(paths, dir_path, image_shape, logging):
     return np.asarray(images)
 
 
-def data_age(dataset, image_folder, EQUAL, image_shape, test_size, augumentation, logging):
+def data_age(dataset, image_folder, EQUAL, image_shape, test_size, preprocessing, logging):
     df = pd.read_csv(dataset, sep=';')
     df.dropna(0, 'any', inplace=True)
 
@@ -47,15 +48,28 @@ def data_age(dataset, image_folder, EQUAL, image_shape, test_size, augumentation
     X_train, X_test, y_train, y_test = train_test_split(
         df.image.values, df['age'].values, test_size=test_size)
 
-    train_images = get_images(X_train, image_folder, image_shape, logging)
-    train_images = train_images / 255.0
-    test_images = get_images(X_test, image_folder, image_shape, logging)
-    test_images = test_images / 255.0
+    train_images = get_images(X_train, image_folder, image_shape, preprocessing, logging)
+    test_images = get_images(X_test, image_folder, image_shape, preprocessing, logging)
 
     return train_images, test_images, y_train, y_test
 
+def augumentation(X_train):
+  datagen = ImageDataGenerator(
+      rotation_range=30,
+      width_shift_range=0.2,
+      height_shift_range=0.2,
+      #shear_range=0.2,
+      #zoom_range=0.3,
+      horizontal_flip=True,
+      fill_mode='nearest'
+  )
 
-def data_gender(dataset, image_folder, img_shape, test_size, augumentation, logging):
+  datagen.fit(X_train)
+
+  return datagen
+
+
+def data_gender(dataset, image_folder, img_shape, test_size, preprocessing, logging):
     image_folder = format_folder_name(image_folder)
     # Depending on how many channels the image is in color or not
     color = 1 if img_shape[2] == 3 else 0
@@ -71,6 +85,10 @@ def data_gender(dataset, image_folder, img_shape, test_size, augumentation, logg
         if logging:
             print('Processing: '+filename)
         img=cv2.imread(image_folder+'/' + filename, color)
+        
+        img = preprocess([img], img_shape, preprocessing)
+        img = img[0]
+
         X.append(img)
         row=df.loc[df['image'] == filename]
         gender=row['gender'].values[0]
@@ -89,36 +107,10 @@ def data_gender(dataset, image_folder, img_shape, test_size, augumentation, logg
     labels_one_hot = onehot_encoder.fit_transform(labels_reshaped)
 
     X = np.asarray(X)
-    X = X / 255.0
+    #X = X / 255.0
     y = np.array(labels_one_hot)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
-
-    if augumentation:
-
-        datagen = ImageDataGenerator(
-            rotation_range=30,
-            width_shift_range=0.2,
-            height_shift_range=0.2,
-            #shear_range=0.2,
-            #zoom_range=0.3,
-            horizontal_flip=True,
-            fill_mode='nearest')
-
-        batch_size = 10
-        index = 0
-        for image in X_train:
-            x = image.reshape((1,) + image.shape)
-
-            i = 0
-            for batch in datagen.flow(x, batch_size=batch_size):
-                i += 1
-                X_train = np.concatenate((X_train, batch))
-                y_train = np.append(y_train, [y_train[index]], axis=0)
-                if i > 4:
-                    print(f'Augmentation: done with ${str(batch_size)} batch')
-                    break
-            index+=1
 
     return X_train, X_test, y_train, y_test
 
@@ -148,44 +140,48 @@ def get_faces(image):
 
   return cropped
 
-def preprocess(input_data, img_shape, preprocessing, augmentation):
-  images=[]
+def preprocess(input_data, img_shape, preprocessing):
+  faces=[]
   if isinstance(input_data, str):
     input_data=format_folder_name(input_data)
     folder=sorted(os.listdir(input_data))
 
+    images = []
     for file in folder:
       img=cv2.imread(input_data + file)
       images.append(img)
 
-  else:
-    images=input_data
+    for image in images:
+     cropped_faces=get_faces(image)
+     faces=faces + cropped_faces
 
-  faces=[]
-  for image in images:
-    cropped_faces=get_faces(image)
-    faces=faces + cropped_faces
+  else:
+    faces=input_data
 
   for i in range(len(faces)):
     faces[i]=cv2.resize(faces[i], (img_shape[0], img_shape[1]))
 
-    if img_shape[2] == 1:
-      faces[i]=cv2.cvtColor(faces[i], cv2.COLOR_BGR2GRAY)
 
     if len(preprocessing) > 0:
       if 'he' in preprocessing:
         faces[i]=he_single(faces[i])
+        
+      if 'gray' in preprocessing:
+        faces[i]=cv2.cvtColor(faces[i], cv2.COLOR_BGR2GRAY)
 
       if 'clahe' in preprocessing:
         faces[i]=clahe_single(faces[i])
 
       if 'canny_edges' in preprocessing:
         faces[i]=canny_edges_single(faces[i])
+      
+      if 'median' in preprocessing:
+        faces[i]=median_filtering_single(faces[i])
 
     faces[i]=faces[i] / 255.0
 
 
-  faces=np.array(faces)
+  faces=np.asarray(faces)
 
   return faces
 

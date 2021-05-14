@@ -1,0 +1,48 @@
+BW Model 1 - våra bilder: 
+w/ Median: 0.9583333333333334
+no Median: 0.9166666666666666
+
+BW Model 2 - våra bilder: 
+w/ Median: 0.8333333333333334
+no Median: 0.875
+
+BW Model 3 - våra bilder: 
+w/ Median: 1.0
+no Median: 1.0
+
+##### Träning test #####
+
+Median:
+1: 0.88
+2: 0.88
+
+
+def create_model(input_shape):
+    inputs = Input(input_shape)
+
+    x = Convolution(inputs, 32)
+    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
+
+    x = Convolution(x, 64)
+    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
+
+    x = Convolution(x, 128)
+    x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
+
+    x = Flatten()(x)
+    x = Dropout(0.5)(x)
+
+    x = Dense(64, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    x = Dense(64, activation='relu')(x)
+    x = Dropout(0.5)(x)
+
+    output = Dense(2, activation="softmax")(x)
+
+    model = Model(inputs=inputs, outputs=output)
+
+    model.compile(loss=["binary_crossentropy"],
+                  optimizer='adam', metrics=["accuracy"])
+
+    return model
+

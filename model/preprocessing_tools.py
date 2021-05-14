@@ -4,6 +4,13 @@ import pandas as pd
 import numpy as np
 
 #
+# Check if dir exist, if not it creates
+#
+def create_dir(dir):
+    if not os.path.isdir(dir):
+        os.mkdir(dir)
+
+#
 # Format image folder name
 #
 def format_folder_name(folder):
@@ -55,6 +62,7 @@ def image_horizontal_halver(image, color):
 # Crops a folder of images vertically and saves them back to destination folder
 #
 def images_vertical_halver(image_folder, destination_folder, color, logging):
+    create_dir(destination_folder)
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -77,6 +85,7 @@ def images_vertical_halver(image_folder, destination_folder, color, logging):
 # Crops a folder of images horizontally and saves them back to destination folder
 #
 def images_horizontal_halver(image_folder, destination_folder, color, logging):
+    create_dir(destination_folder)
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -99,6 +108,7 @@ def images_horizontal_halver(image_folder, destination_folder, color, logging):
 # Resizes images in image_folder and writes them to destination_folder
 #
 def resize_images(image_folder, destination_folder, size, logging):
+    create_dir(destination_folder)
     # Makes sure folders end with '/'
     image_folder = format_folder_name(image_folder)
     destination_folder = format_folder_name(destination_folder)
@@ -138,6 +148,7 @@ def equal_distribution_dataset(df):
 #
 
 def age_gender_division(image_folder, destination_folder, df, path_new_df, size, logging):
+    create_dir(destination_folder)
     men_count = 0
     women_count = 0
     df = pd.read_csv(df, sep=';')
@@ -190,6 +201,7 @@ def age_gender_division(image_folder, destination_folder, df, path_new_df, size,
 # Grayscale transform - Preprocess
 #
 def grayscale(image_folder, destination_folder, logging):
+    create_dir(destination_folder)
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -206,6 +218,32 @@ def grayscale(image_folder, destination_folder, logging):
             grayscale_img = cv2.imread(image_folder+image, 0)
             cv2.imwrite(destination_folder+image, grayscale_img)
 
+def median_filtering_single(img):
+    return cv2.medianBlur(img, 5)
+
+#
+# Median Filtering - Preprocess
+#
+def median_filtering(image_folder, destination_folder, color, logging):
+    create_dir(destination_folder)
+    images = os.listdir(image_folder)
+    if '.DS_Store' in images:
+        images.remove('.DS_Store')
+    # Makes sure folders end with '/'
+    image_folder = format_folder_name(image_folder)
+    destination_folder = format_folder_name(destination_folder)
+
+    count = 1
+    for image in images:
+        if os.path.isfile(image_folder+image):
+            if logging:
+                print(f'Processing: {image} ({count}/{len(images)})')
+                count += 1
+            img = cv2.imread(image_folder+image, color)
+            median = median_filtering_single(img)
+            cv2.imwrite(destination_folder+image, median)
+
+
 def he_single(img):
   he_img = cv2.equalizeHist(img)
   return he_img
@@ -214,6 +252,11 @@ def he_single(img):
 # HE transform - Preprocess
 #
 def he(image_folder, destination_folder, logging):
+    create_dir(destination_folder)
+
+    # Create destination fodler
+    os.mkdir(destination_folder)
+
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -231,10 +274,13 @@ def he(image_folder, destination_folder, logging):
             he_img = he_single(img) 
             cv2.imwrite(destination_folder+image, he_img)
 
+#he('resized_96_equal_distribution_pictures', 'he_resized_96_equal_distribution_pictures', True)
+
 #
 # BGR transform - Preprocess
 #
 def bgr(image_folder, destination_folder, logging):
+    create_dir(destination_folder)
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -266,6 +312,7 @@ def clahe_single(img):
 # CLAHE - Preprocess
 #
 def clahe(image_folder, destination_folder, logging):
+    create_dir(destination_folder)
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -292,6 +339,7 @@ def canny_edges_single(img):
 # Canny edges - Preprocess
 #
 def canny_edges(image_folder, destination_folder, logging):
+    create_dir(destination_folder)
     images = os.listdir(image_folder)
     if '.DS_Store' in images:
         images.remove('.DS_Store')
@@ -358,66 +406,3 @@ def list_true_labels(quantity):
         women.append(1)
 
     return men + women
-
-#
-# Predict images using model
-#
-def model_predict(model, image_list, image_folder, true_labels, labels, image_dim):
-    # Makes sure folders end with '/'
-    image_folder = format_folder_name(image_folder)
-
-    resulting_image_list = image_list.copy()
-
-    indices_not_found = []
-    images_no_face_found = 0
-    test_data = []
-    print('Processing images...')
-    for i, image in enumerate(image_list):
-        grayscale_image = cv2.imread(image_folder+image, 0)
-
-        # Load classifier
-        face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-
-        # Detect faces of varying sizes
-        detected_faces = face_cascade.detectMultiScale(grayscale_image)
-
-        if len(detected_faces) > 0:
-            col = detected_faces[0][0]
-            row = detected_faces[0][1]
-            w = detected_faces[0][2]
-            h = detected_faces[0][3]
-            # Resize image to only be the face
-            face_img = grayscale_image[row:row+h, col:col+w]
-            img_to_test = cv2.resize(face_img, (image_dim['width'], image_dim['height']))
-            img_to_test = img_to_test.reshape(-1, image_dim['width'], image_dim['height'], image_dim['channels'])
-            test_data.append(img_to_test)
-        else:
-            indices_not_found.append(i)
-            images_no_face_found += 1
-
-    for index in sorted(indices_not_found, reverse=True):
-        del true_labels[index]
-        del image_list[index]
-
-
-    test_data = np.vstack(test_data)
-    result = model.predict(test_data)
-
-    # print('\n----- Prediction Finished -----')
-    #
-    #
-    # corrects = 0
-    # prediction_count = len(result)
-    # for i in range(prediction_count):
-    #     pred_index = np.argmax(result[i])
-    #     true_index = true_labels[i]
-    #     pred_label = labels[pred_index]
-    #     true_label = labels[true_index]
-    #     print(f'Predicted: {pred_label} | True: {true_label}')
-    #
-    #     if pred_index == true_index:
-    #         corrects += 1
-    #     else:
-    #         print(f'Image incorrectly predicted: {image_list[i]}')
-    #
-    # print(f'\nThe model predicted: {corrects}/{prediction_count} correct, whereas {images_no_face_found} images had no faces found')

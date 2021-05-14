@@ -3,6 +3,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+from data import augumentation
 
 def create_model(input_shape):
 
@@ -56,7 +57,7 @@ def create_model(input_shape):
 
     return model
 
-def train_age_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, model_save, monitor='val_loss'):
+def train_age_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs,model_save, aug = False, monitor='val_loss'):
 
   model = create_model(img_shape)
 
@@ -77,7 +78,10 @@ def train_age_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epo
     )
   callback_list = [checkpointer, Early_stop]
 
-  model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size,
-                      validation_data=(X_test, y_test), callbacks=[callback_list])
+  if aug:
+    datagen = augumentation(X_train)
+    model.fit(datagen.flow(X_train, y_train, batch_size=batch_size), epochs=epochs, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=[callback_list])
+  else:
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_data=(X_test, y_test), callbacks=[callback_list])
 
   return model
