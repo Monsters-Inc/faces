@@ -206,6 +206,10 @@ def grayscale(image_folder, destination_folder, logging):
             grayscale_img = cv2.imread(image_folder+image, 0)
             cv2.imwrite(destination_folder+image, grayscale_img)
 
+def he_single(img):
+  he_img = cv2.equalizeHist(img)
+  return he_img
+
 #
 # HE transform - Preprocess
 #
@@ -224,10 +228,8 @@ def he(image_folder, destination_folder, logging):
                 print(f'Processing: {image} ({count}/{len(images)})')
                 count += 1
             img = cv2.imread(image_folder+image, 0)
-            he_img = cv2.equalizeHist(img)
+            he_img = he_single(img) 
             cv2.imwrite(destination_folder+image, he_img)
-
-he('equal_distribution_pictures/', 'he_equal_distribution_pictures/', True)
 
 #
 # BGR transform - Preprocess
@@ -250,6 +252,16 @@ def bgr(image_folder, destination_folder, logging):
             BGR_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             cv2.imwrite(destination_folder+image, BGR_img)
 
+def clahe_single(img):
+  lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+  l, a, b = cv2.split(lab)
+  clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
+  clahe_l = clahe.apply(l)
+  merged_channels = cv2.merge((clahe_l, a, b))
+  clahe = cv2.cvtColor(merged_channels, cv2.COLOR_LAB2BGR)
+  return clahe
+
+
 #
 # CLAHE - Preprocess
 #
@@ -268,14 +280,14 @@ def clahe(image_folder, destination_folder, logging):
                 print(f'Processing: {image} ({count}/{len(images)})')
                 count += 1
             img = cv2.imread(image_folder+image)
-            lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
-            l, a, b = cv2.split(lab)
-            clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8,8))
-            clahe_l = clahe.apply(l)
-            merged_channels = cv2.merge((clahe_l, a, b))
-            clahe = cv2.cvtColor(merged_channels, cv2.COLOR_LAB2BGR)
+            clahe = clahe_single(img)
             cv2.imwrite(destination_folder+image, clahe)
 
+
+def canny_edges_single(img):
+    height, width = img.shape
+    edges = cv2.Canny(img, height, width)
+    return edges
 #
 # Canny edges - Preprocess
 #
@@ -294,8 +306,7 @@ def canny_edges(image_folder, destination_folder, logging):
                 print(f'Processing: {image} ({count}/{len(images)})')
                 count += 1
             img = cv2.imread(image_folder+image, 0)
-            height, width = img.shape
-            edges = cv2.Canny(img, height, width)
+            edges = canny_edges_single(img)
             cv2.imwrite(destination_folder+image, edges)
 
 #

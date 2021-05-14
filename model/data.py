@@ -11,7 +11,6 @@ import random
 
 face_detection_model = 'premade.dat'
 
-
 def get_images(paths, dir_path, image_shape, logging):
     dir_path = format_folder_name(dir_path)
     images = []
