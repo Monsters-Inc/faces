@@ -22,7 +22,7 @@ def create_model(input_shape):
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
 
     x = Flatten()(x)
-    x = Dropout(0.8)(x)
+    x = Dropout(0.5)(x)
 
     x = Dense(64, activation='relu')(x)
     x = Dropout(0.5)(x)

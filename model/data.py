@@ -88,12 +88,11 @@ def data_gender(dataset, image_folder, img_shape, test_size, augumentation, logg
     labels_reshaped = labels.reshape(len(labels), 1)
     labels_one_hot = onehot_encoder.fit_transform(labels_reshaped)
 
-    X = np.array(X)
-    X = X / 255
+    X = np.asarray(X)
+    X = X / 255.0
     y = np.array(labels_one_hot)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
-
 
     if augumentation:
 
