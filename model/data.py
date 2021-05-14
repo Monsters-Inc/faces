@@ -2,26 +2,79 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
+import dlib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array
+from preprocessing_tools import format_folder_name, he_single, clahe_single, canny_edges_single
+import random
 
-def data(dataset, image_folder, img_shape, test_size, augumentation, logging):
+face_detection_model = 'premade.dat'
+
+
+def get_images(paths, dir_path, image_shape, logging):
+    dir_path = format_folder_name(dir_path)
+    images = []
+    count = 0
+    for image in paths:
+        if logging:
+            print('Getting Images: '+image+' | ' +
+                  str(count)+'/'+str(len(paths)), end='\r')
+        temp = cv2.imread(dir_path + image)
+        temp = cv2.resize(temp, (image_shape[0], image_shape[1]))
+
+        images.append(temp)
+        count += 1
+
+    return np.asarray(images)
+
+
+def data_age(dataset, image_folder, EQUAL, image_shape, test_size, augumentation, logging):
+    df = pd.read_csv(dataset, sep=';')
+    df.dropna(0, 'any', inplace=True)
+
+    if EQUAL:
+        women = df.loc[df['gender'] == 'K', ['image', 'age']]
+        sample_size = len(women.index)
+
+        men = df.loc[df['gender'] == 'M', ['image', 'age']]
+
+        women = women.sample(n=sample_size)
+        men = men.sample(n=sample_size)
+
+        df = women.append(men)
+
+    df = df.sample(frac=1)
+    X_train, X_test, y_train, y_test = train_test_split(
+        df.image.values, df['age'].values, test_size=test_size)
+
+    train_images = get_images(X_train, image_folder, image_shape, logging)
+    train_images = train_images / 255.0
+    test_images = get_images(X_test, image_folder, image_shape, logging)
+    test_images = test_images / 255.0
+
+    return train_images, test_images, y_train, y_test
+
+
+def data_gender(dataset, image_folder, img_shape, test_size, augumentation, logging):
+    image_folder = format_folder_name(image_folder)
     # Depending on how many channels the image is in color or not
     color = 1 if img_shape[2] == 3 else 0
 
     # Read Dataset
     df = pd.read_csv(dataset, sep=';')
 
-    X = []
-    labels = []
-    for filename in os.listdir(image_folder):
+    folder = os.listdir(image_folder)
+    folder = random.sample(folder, len(folder))
+    X=[]
+    labels=[]
+    for filename in folder:
         if logging:
             print('Processing: '+filename)
-        img = cv2.imread(image_folder+'/' + filename, color)
+        img=cv2.imread(image_folder+'/' + filename, color)
         X.append(img)
-        row = df.loc[df['image'] == filename]
-        gender = row['gender'].values[0]
+        row=df.loc[df['image'] == filename]
+        gender=row['gender'].values[0]
 
         if gender == 'K' or gender == 'F':
             labels.append(1)
@@ -70,3 +123,71 @@ def data(dataset, image_folder, img_shape, test_size, augumentation, logging):
             index+=1
 
     return X_train, X_test, y_train, y_test
+
+
+def get_faces(image):
+
+  model=dlib.cnn_face_detection_model_v1(face_detection_model)
+  faces=model(image)
+
+  cropped=[]
+
+  for face in faces:
+    x=face.rect.left()
+    y=face.rect.top()
+    w=face.rect.right()
+    h=face.rect.bottom()
+    x=max(0, x)
+    y=max(0, y)
+    w=max(0, w)
+    h=max(0, h)
+
+    crop=image[y:h, x:w]
+    cropped.append(crop)
+    # cv2.imshow('bild', crop)
+    # cv2.waitKey()
+    # cv2.destroyAllWindows()
+
+  return cropped
+
+def preprocess(input_data, img_shape, preprocessing, augmentation):
+  images=[]
+  if isinstance(input_data, str):
+    input_data=format_folder_name(input_data)
+    folder=sorted(os.listdir(input_data))
+
+    for file in folder:
+      img=cv2.imread(input_data + file)
+      images.append(img)
+
+  else:
+    images=input_data
+
+  faces=[]
+  for image in images:
+    cropped_faces=get_faces(image)
+    faces=faces + cropped_faces
+
+  for i in range(len(faces)):
+    faces[i]=cv2.resize(faces[i], (img_shape[0], img_shape[1]))
+
+    if img_shape[2] == 1:
+      faces[i]=cv2.cvtColor(faces[i], cv2.COLOR_BGR2GRAY)
+
+    if len(preprocessing) > 0:
+      if 'he' in preprocessing:
+        faces[i]=he_single(faces[i])
+
+      if 'clahe' in preprocessing:
+        faces[i]=clahe_single(faces[i])
+
+      if 'canny_edges' in preprocessing:
+        faces[i]=canny_edges_single(faces[i])
+
+    faces[i]=faces[i] / 255.0
+
+
+  faces=np.array(faces)
+
+  return faces
+
