@@ -23,7 +23,7 @@ def get_images(paths, dir_path, image_shape, preprocessing, logging):
         temp = cv2.resize(temp, (image_shape[0], image_shape[1]))
         temp = preprocess([temp], image_shape, preprocessing)
 
-        images.append(temp)
+        images.append(temp[0])
         count += 1
 
     return np.asarray(images)

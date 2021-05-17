@@ -17,8 +17,8 @@ batch_size = 64
 epochs = 300
 multiple_runs = True
 monitor = 'val_loss'
-augumentation = True
-preprocessing = ['median']
+augumentation = False 
+preprocessing = ['median', 'gray']
 
 # train gender model
 def gender():
@@ -29,7 +29,7 @@ def gender():
 
 def age(equal = False):
     X_train, X_test, y_train, y_test = data_age(dataset, full_dataset_folder, equal, img_shape, test_size, preprocessing, logging)
-    return X_test, y_test, train_age_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, augumentation, age_model_save, monitor)
+    return X_test, y_test, train_age_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, age_model_save, augumentation, monitor)
 
 type_m = 'B'
 
