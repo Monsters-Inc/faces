@@ -1,0 +1,13 @@
+# Our Dataset (5 runs each)
+BGR: 0.752
+he: 0.7240000000000001
+clahe: 0.708
+canny edge detection: 0.628
+median: 0.7520000000000001
+
+# Our Dataset (5 runs each)
+BGR: 0.772
+he: 0.7639999999999999
+clahe: 0.72
+canny edge dection: 0.5760000000000001
+median: 0.772

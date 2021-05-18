@@ -1,8 +1,7 @@
-from tensorflow.keras.layers import Dense, MaxPooling2D, Conv2D, Dropout, Flatten, Input, ZeroPadding2D
+from tensorflow.keras.layers import Dense, MaxPooling2D, Conv2D, Dropout, Flatten, Input
 from tensorflow.keras.models import Model
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
-from tensorflow.keras.optimizers import Adam
 from data import augumentation
 import numpy as np
 
@@ -20,7 +19,7 @@ def create_model(input_shape):
     x = Convolution(inputs, 32, (5, 5))
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
 
-    x = Convolution(inputs, 64, (4, 4))
+    x = Convolution(x, 64, (4, 4))
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
 
     x = Convolution(x, 128, (3, 3))
@@ -41,8 +40,7 @@ def create_model(input_shape):
 
     return model
 
-
-def train_gender_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, datagen, model_save, aug = False, monitor='val_loss'):
+def train_gender_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, aug, model_save, monitor='val_loss'):
 
     model = create_model(img_shape)
     #model.summary()

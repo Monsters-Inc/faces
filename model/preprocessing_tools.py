@@ -146,8 +146,7 @@ def equal_distribution_dataset(df):
 #
 # Creates folder with equal gender distribution, only people with age in csv
 #
-
-def age_gender_division(image_folder, destination_folder, df, path_new_df, size, logging):
+def age_gender_division(image_folder, destination_folder, df, size, logging):
     create_dir(destination_folder)
     men_count = 0
     women_count = 0
@@ -193,9 +192,98 @@ def age_gender_division(image_folder, destination_folder, df, path_new_df, size,
                     men_count += 1 
                     
         count+=1
+
+#
+# Creates folder with equal gender distribution
+#
+def gender_division(image_folder, destination_folder, df, size, logging):
+    create_dir(destination_folder)
+    men_count = 0
+    women_count = 0
+    df = pd.read_csv(df, sep=';')
+    #df_ages = df[df['age'].notna()]
+    df_ages = df_ages.sample(frac=1)
+    women_max_count = df_ages['gender'].value_counts().K
+
+    new_df = pd.DataFrame(columns = ['image', 'gender', 'age'])
+
+    image_folder = format_folder_name(image_folder)
+    destination_folder = format_folder_name(destination_folder)
+    
+    images = os.listdir(image_folder)
+    count = 1
+    for filename in images:
+        if os.path.isfile(image_folder+filename):
+            if '.DS_Store' in images:
+                images.remove('.DS_Store')
+            if logging:
+                print('Age and gender dividing: '+filename+' | '+str(count)+'/'+str(len(images)))
+        
+            if filename in df_ages.values:
+                row = df_ages.loc[df_ages['image'] == filename]
+                gender = row['gender'].values[0]
+                age = row['age'].values[0]
+
+                if (men_count >= women_max_count) and (women_count >= women_max_count):
+                    break
+                
+                elif (gender == 'K' or gender == 'F') and age:
+                    img = cv2.imread(image_folder+filename, 1)
+                    img = cv2.resize(img, size)
+                    new_df.append(row)
+                    cv2.imwrite(destination_folder+filename, img)
+                    women_count += 1
+            
+                elif gender == 'M' and men_count < women_max_count and age:
+                    img = cv2.imread(image_folder+filename, 1)
+                    img = cv2.resize(img, size)
+                    new_df.append(row)
+                    cv2.imwrite(destination_folder+filename, img)
+                    men_count += 1 
                     
-    # Save new df
-    new_df.to_csv(path_new_df, sep=';')
+        count+=1
+
+#
+# Takes out every person without an age
+#
+def get_no_age(image_folder, destination_folder, df, size, logging):
+    image_folder = format_folder_name(image_folder)
+    destination_folder = format_folder_name(destination_folder)
+    create_dir(destination_folder)
+    df = pd.read_csv(df, sep=';')
+    df_no_ages = df[df['age'].isna()]
+    
+    images = df_no_ages['image'].values
+    for i, image in enumerate(images):
+        if logging:
+            print(f"Processing: ({i+1}/{len(images)})")
+        if os.path.isfile(image_folder+image):
+            if '.DS_Store' in images:
+                images.remove('.DS_Store')
+        img = cv2.imread(image_folder+image)
+        resized_img = cv2.resize(img, size)
+        cv2.imwrite(destination_folder+df_no_ages['gender'].values[i]+image, resized_img)
+
+#
+# Takes out every person without an age
+#
+def get_all_age(image_folder, destination_folder, df, size, logging):
+    image_folder = format_folder_name(image_folder)
+    destination_folder = format_folder_name(destination_folder)
+    create_dir(destination_folder)
+    df = pd.read_csv(df, sep=';')
+    df_age = df[df['age'].notna()]
+    
+    images = df_age['image'].values
+    for i, image in enumerate(images):
+        if logging:
+            print(f"Processing: ({i+1}/{len(images)})")
+        if os.path.isfile(image_folder+image):
+            if '.DS_Store' in images:
+                images.remove('.DS_Store')
+        img = cv2.imread(image_folder+image)
+        resized_img = cv2.resize(img, size)
+        cv2.imwrite(destination_folder+image, resized_img)
 
 #
 # Grayscale transform - Preprocess
@@ -218,8 +306,10 @@ def grayscale(image_folder, destination_folder, logging):
             grayscale_img = cv2.imread(image_folder+image, 0)
             cv2.imwrite(destination_folder+image, grayscale_img)
 
+#grayscale('equal_dataset_96', 'equal_dataset_96_grayscale', True)
+
 def median_filtering_single(img):
-    return cv2.medianBlur(img, 5)
+    return cv2.medianBlur(img, 7)
 
 #
 # Median Filtering - Preprocess
@@ -247,6 +337,11 @@ def median_filtering(image_folder, destination_folder, color, logging):
 def he_single(img):
   he_img = cv2.equalizeHist(img)
   return he_img
+
+
+img = cv2.imread('our_dataset/f1.jpg', 0)
+he = he_single(img)
+cv2.imwrite('our_dataset/f11.jpg', he)
 
 #
 # HE transform - Preprocess
@@ -406,3 +501,4 @@ def list_true_labels(quantity):
         women.append(1)
 
     return men + women
+

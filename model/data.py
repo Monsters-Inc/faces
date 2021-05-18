@@ -2,10 +2,10 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
-import dlib
+#import dlib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from preprocessing_tools import format_folder_name, he_single, clahe_single, canny_edges_single, median_filtering_single
 import random
 
@@ -115,30 +115,30 @@ def data_gender(dataset, image_folder, img_shape, test_size, preprocessing, logg
     return X_train, X_test, y_train, y_test
 
 
-def get_faces(image):
+# def get_faces(image):
 
-  model=dlib.cnn_face_detection_model_v1(face_detection_model)
-  faces=model(image)
+#   model=dlib.cnn_face_detection_model_v1(face_detection_model)
+#   faces=model(image)
 
-  cropped=[]
+#   cropped=[]
 
-  for face in faces:
-    x=face.rect.left()
-    y=face.rect.top()
-    w=face.rect.right()
-    h=face.rect.bottom()
-    x=max(0, x)
-    y=max(0, y)
-    w=max(0, w)
-    h=max(0, h)
+#   for face in faces:
+#     x=face.rect.left()
+#     y=face.rect.top()
+#     w=face.rect.right()
+#     h=face.rect.bottom()
+#     x=max(0, x)
+#     y=max(0, y)
+#     w=max(0, w)
+#     h=max(0, h)
 
-    crop=image[y:h, x:w]
-    cropped.append(crop)
-    # cv2.imshow('bild', crop)
-    # cv2.waitKey()
-    # cv2.destroyAllWindows()
+#     crop=image[y:h, x:w]
+#     cropped.append(crop)
+#     # cv2.imshow('bild', crop)
+#     # cv2.waitKey()
+#     # cv2.destroyAllWindows()
 
-  return cropped
+#   return cropped
 
 def preprocess(input_data, img_shape, preprocessing):
   faces=[]
@@ -151,9 +151,12 @@ def preprocess(input_data, img_shape, preprocessing):
       img=cv2.imread(input_data + file)
       images.append(img)
 
-    for image in images:
-     cropped_faces=get_faces(image)
-     faces=faces + cropped_faces
+
+    faces=images
+
+    # for image in images:
+    #  cropped_faces=get_faces(image)
+    #  faces=faces + cropped_faces
 
   else:
     faces=input_data
@@ -161,18 +164,17 @@ def preprocess(input_data, img_shape, preprocessing):
   for i in range(len(faces)):
     faces[i]=cv2.resize(faces[i], (img_shape[0], img_shape[1]))
 
-
     if len(preprocessing) > 0:
+      if 'gray' in preprocessing:
+        if img_shape[2] == 3:
+          faces[i]=cv2.cvtColor(faces[i], cv2.COLOR_BGR2GRAY)
       if 'he' in preprocessing:
         faces[i]=he_single(faces[i])
-        
-      if 'gray' in preprocessing:
-        faces[i]=cv2.cvtColor(faces[i], cv2.COLOR_BGR2GRAY)
 
       if 'clahe' in preprocessing:
         faces[i]=clahe_single(faces[i])
 
-      if 'canny_edges' in preprocessing:
+      if 'canny' in preprocessing:
         faces[i]=canny_edges_single(faces[i])
       
       if 'median' in preprocessing:
