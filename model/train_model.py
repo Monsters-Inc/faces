@@ -39,7 +39,7 @@ if len(preprocessing) > 0:
 # train gender model
 def gender():
     X_train, X_test, y_train, y_test = data_gender(dataset, image_folder, img_shape, test_size, preprocessing, logging)
-    return X_test, y_test, train_gender_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, augumentation, gender_model_save, monitor)
+    return X_test, y_test, train_gender_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, gender_model_save, augumentation, monitor)
 # Train age model
 
 
