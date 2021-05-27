@@ -89,11 +89,7 @@ return (
 
   <div className="App">
     <header className="App-header">
-    <Row >
-      <Col><strong>Image</strong></Col>
-      <Col><strong>Age</strong></Col>
-      <Col><strong>Gender</strong></Col>
-    </Row>
+    
     {isImage ? 
             <div>
             <img src={upload} className="photo"/></div>
@@ -111,6 +107,11 @@ return (
     <p/>
 
     <div className="description">Prediction:</div>
+    <Row>
+      <Col><strong>Image</strong></Col>
+      <Col><strong>Age</strong></Col>
+      <Col><strong>Gender</strong></Col>
+    </Row>
     {prediction.map((row, index) => ( 
   <Row >
     <Col>{row[0]}</Col>
