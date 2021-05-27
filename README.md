@@ -11,7 +11,7 @@ with the Python algorithm via a Node.js server.
 The authors of the code are 
 - [gali8033](https://github.com/gali8033)
 - [FilPag](https://github.com/FilPag)
-- [Lice7173](https://github.com/orgs/Monsters-Inc/people/Lice7173)
+- [Lice7173](https://github.com/Lice7173)
 - [ulrikabremberg](https://github.com/ulrikabremberg)
 
 
