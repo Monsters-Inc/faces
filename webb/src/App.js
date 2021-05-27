@@ -89,7 +89,11 @@ return (
 
   <div className="App">
     <header className="App-header">
-  
+    <Row >
+      <Col><strong>Image</strong></Col>
+      <Col><strong>Age</strong></Col>
+      <Col><strong>Gender</strong></Col>
+    </Row>
     {isImage ? 
             <div>
             <img src={upload} className="photo"/></div>
@@ -109,9 +113,9 @@ return (
     <div className="description">Prediction:</div>
     {prediction.map((row, index) => ( 
   <Row >
-    <Col>Image: {row[0]}</Col>
-    <Col>Age: {row[1]}</Col>
-    <Col>Gender: {row[2]}</Col>
+    <Col>{row[0]}</Col>
+    <Col>{row[1]}</Col>
+    <Col>{row[2]}</Col>
   </Row>
 ))}
 
@@ -129,8 +133,7 @@ return (
 
     <input type="file" multiple name="file" className="input" onChange={multipleFilesOnChange} />
     {showPredict ? <button onClick={sendMultipleImages} className="button">Predict</button> : <div></div>}
-    {/* <button onClick={sendMultipleImages} className="button">Predict</button> */}
-
+    <a href='pred.csv' download='pred.csv'>Download spreadsheet file</a>
 
     </header>
   </div>
