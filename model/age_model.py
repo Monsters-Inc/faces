@@ -18,7 +18,7 @@ def create_model(input_shape):
     x = Convolution(inputs, 32, (5, 5))
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
 
-    x = Convolution(inputs, 64, (4, 4))
+    x = Convolution(x, 64, (4, 4))
     x = MaxPooling2D(pool_size=(2, 2), padding='same')(x)
 
     x = Convolution(x, 128, (3, 3))
@@ -30,7 +30,7 @@ def create_model(input_shape):
     x = Dense(64, activation='relu')(x)
     x = Dropout(0.5)(x)
 
-    output = Dense(2, activation="relu")(x)
+    output = Dense(1, activation="relu")(x)
 
     model = Model(inputs=inputs, outputs=output)
 
@@ -39,8 +39,7 @@ def create_model(input_shape):
 
     return model
 
-
-def train_age_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs,model_save, aug = False, monitor='val_loss'):
+def train_age_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, aug, model_save, monitor='val_loss'):
 
   model = create_model(img_shape)
 

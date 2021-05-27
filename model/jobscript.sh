@@ -11,13 +11,40 @@ module load OpenCV scikit-learn matplotlib
 echo "> Modules loaded"
 
 RUNS=1
+PREDICT_DATASET="our_dataset"
 
-# Constants
+echo "> Running train_model.py ${RUNS} times"
+
+PREPROCESSING="he"
+python3 train_model.py A $PREPROCESSING
+
+PREPROCESSING=""
+python3 train_model.py A $PREPROCESSING
+
 PREPROCESSING="median"
-PREDICT_DATASET="dataset_no_age"
+python3 train_model.py A $PREPROCESSING
 
-python3 run_model.py $PREDICT_DATASET $PREPROCESSING
-#python3 train_model.py G $PREPROCESSING
+PREPROCESSING="canny"
+python3 train_model.py A $PREPROCESSING
+
+# # The program to run
+
+# for ((i=1; i<=$RUNS; i++))
+# do  
+#     echo "> Running ${i} program"
+#     python3 train_model.py G $PREPROCESSING
+#     python3 run_model.py $PREDICT_DATASET $PREPROCESSING
+# done
+
+# echo "> Counting accuracy for ${RUNS} runs:"
+
+# # Count accuracy
+# python3 average_accuracy.py $PREPROCESSING $RUNS
+
+# #--------
+
+# # Constants
+# PREPROCESSING="he"
 
 # echo "> Running train_model.py ${RUNS} times"
 
@@ -35,86 +62,46 @@ python3 run_model.py $PREDICT_DATASET $PREPROCESSING
 # # Count accuracy
 # python3 average_accuracy.py $PREPROCESSING $RUNS
 
-# # #--------
+# #--------
 
-# # # Constants
-# # PREPROCESSING="he"
+# # Constants
+# PREPROCESSING="canny"
 
-# # echo "> Running train_model.py ${RUNS} times"
+# echo "> Running train_model.py ${RUNS} times"
 
-# # # The program to run
+# # The program to run
 
-# # for ((i=1; i<=$RUNS; i++))
-# # do  
-# #     echo "> Running ${i} program"
-# #     python3 train_model.py G $PREPROCESSING
-# #     python3 run_model.py $PREDICT_DATASET $PREPROCESSING
-# # done
+# for ((i=1; i<=$RUNS; i++))
+# do  
+#     echo "> Running ${i} program"
+#     python3 train_model.py G $PREPROCESSING
+#     python3 run_model.py $PREDICT_DATASET $PREPROCESSING
+# done
 
-# # echo "> Counting accuracy for ${RUNS} runs:"
+# echo "> Counting accuracy for ${RUNS} runs:"
 
-# # # Count accuracy
-# # python3 average_accuracy.py $PREPROCESSING $RUNS
+# # Count accuracy
+# python3 average_accuracy.py $PREPROCESSING $RUNS
 
-# # #--------
+# #--------
 
-# # # Constants
-# # PREPROCESSING="clahe"
+# # Constants
+# PREPROCESSING=""
 
-# # echo "> Running train_model.py ${RUNS} times"
+# echo "> Running train_model.py ${RUNS} times"
 
-# # # The program to run
+# # The program to run
 
-# # for ((i=1; i<=$RUNS; i++))
-# # do  
-# #     echo "> Running ${i} program"
-# #     python3 train_model.py G $PREPROCESSING
-# #     python3 run_model.py $PREDICT_DATASET $PREPROCESSING
-# # done
+# for ((i=1; i<=$RUNS; i++))
+# do  
+#     echo "> Running ${i} program"
+#     python3 train_model.py G $PREPROCESSING
+#     python3 run_model.py $PREDICT_DATASET $PREPROCESSING
+# done
 
-# # echo "> Counting accuracy for ${RUNS} runs:"
+# echo "> Counting accuracy for ${RUNS} runs:"
 
-# # # Count accuracy
-# # python3 average_accuracy.py $PREPROCESSING $RUNS
+# # Count accuracy
+# python3 average_accuracy.py $PREPROCESSING $RUNS
 
-# # #--------
-
-# # # Constants
-# # PREPROCESSING="canny"
-
-# # echo "> Running train_model.py ${RUNS} times"
-
-# # # The program to run
-
-# # for ((i=1; i<=$RUNS; i++))
-# # do  
-# #     echo "> Running ${i} program"
-# #     python3 train_model.py G $PREPROCESSING
-# #     python3 run_model.py $PREDICT_DATASET $PREPROCESSING
-# # done
-
-# # echo "> Counting accuracy for ${RUNS} runs:"
-
-# # # Count accuracy
-# # python3 average_accuracy.py $PREPROCESSING $RUNS
-
-# # #--------
-
-# # # Constants
-# # PREPROCESSING="median"
-
-# # echo "> Running train_model.py ${RUNS} times"
-
-# # # The program to run
-
-# # for ((i=1; i<=$RUNS; i++))
-# # do  
-# #     echo "> Running ${i} program"
-# #     python3 train_model.py G $PREPROCESSING
-# #     python3 run_model.py $PREDICT_DATASET $PREPROCESSING
-# # done
-
-# # echo "> Counting accuracy for ${RUNS} runs:"
-
-# # # Count accuracy
-# # python3 average_accuracy.py $PREPROCESSING $RUNS
+# #--------

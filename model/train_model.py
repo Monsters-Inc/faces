@@ -5,19 +5,19 @@ from data import data_age, data_gender
 import numpy as np
 
 # Settings
-image_folder = "equal_dataset_96_grayscale"
-full_dataset_folder = "../dataset"
+image_folder = "dataset_grayscale"
+full_dataset_folder = "dataset/"
 dataset = "../data/full_dataset.csv"
 test_size = 0.25
-img_shape = (96, 96, 3)
+img_shape = (96, 96, 1)
 logging = False
-gender_model_save = 'g_final.h5'
+gender_model_save = 'g_final_dataset_grayscale_testing.h5'
 age_model_save = 'a_final.h5'
 batch_size = 64
 epochs = 300
 monitor = 'val_loss'
 augumentation = False
-preprocessing = []
+preprocessing = ['gray']
 
 type_m = 'B'
 
@@ -26,20 +26,14 @@ if len(sys.argv) > 1:
 
     if len(sys.argv) > 2:
         preprocessing.append(sys.argv[2].lower())
+        gender_model_save = 'g_testing_'+sys.argv[2].lower()+'.h5'
 
-if len(preprocessing) > 0:
-    temp = []
-    if preprocessing[0] == 'gray' or preprocessing[0] == 'he' or preprocessing[0] == 'canny' or preprocessing[0] == 'median':
-        img_shape = (96, 96, 1)
-        image_folder = "equal_dataset_96_grayscale"
-        temp.append('gray')
-        temp.append(preprocessing[0])
-    preprocessing = temp
+print(preprocessing)
 
 # train gender model
 def gender():
     X_train, X_test, y_train, y_test = data_gender(dataset, image_folder, img_shape, test_size, preprocessing, logging)
-    return X_test, y_test, train_gender_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, gender_model_save, augumentation, monitor)
+    return X_test, y_test, train_gender_model(X_train, X_test, y_train, y_test, img_shape, batch_size, epochs, augumentation, gender_model_save, monitor)
 # Train age model
 
 
@@ -75,3 +69,8 @@ elif type_m == 'B':
 else:
     print('Usage: python run_model.py {A/G}')
     quit()
+
+# This appends the accuracy to results.txt
+f = open("results_age_validation_dataset.txt", "a")
+f.write(str(score)+'\n')
+f.close()

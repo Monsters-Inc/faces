@@ -1,23 +1,23 @@
 import os
 import sys
-from tensorflow import keras 
+from tensorflow import keras
 from data import preprocess
 import numpy as np
 
 img_shape = (96, 96, 3)
-model_path = 'g_final_median.h5'
-preprocessing = []
-directory = 'our_dataset'
+model_path = 'g_final_dataset_grayscale_testing.h5'
+preprocessing = ['gray']
+directory = ''
 
 arg = sys.argv
 
 if len(arg) > 1:
-    directory = arg[1].lower()
-    if len(arg) > 2:
-      if arg[2] == 'gray' or arg[2] == 'he' or arg[2] == 'canny' or arg[2] == 'median':
-        preprocessing.append('gray')
-      
-      preprocessing.append(arg[2].lower())
+  directory = arg[1].lower()
+
+  if len(arg) > 2:
+    preprocessing.append(arg[2].lower())
+    model_path = 'g_testing_'+arg[2].lower()+'.h5'
+
 
 faces = preprocess(directory, img_shape, preprocessing)
 
@@ -37,8 +37,6 @@ for file in files:
   if 'f' in file or 'F' in file or 'k' in file or 'K' in file:
     trues.append(1)
     count+=1
-
-print(count)
 
 corrects = 0
 labels = ['male', 'female']

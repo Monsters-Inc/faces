@@ -22,7 +22,7 @@ accuracy = sum / len(content)
 print(accuracy)
 
 # This appends the accuracy to results.txt
-f = open("total_results.txt", "a")
+f = open("results_dataset.txt", "a")
 f.write(preprocessing+' ('+str(runs)+'): '+str(accuracy)+'\n')
 f.close()
 

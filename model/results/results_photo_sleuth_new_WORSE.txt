@@ -1,0 +1,6 @@
+median (5): 0.808
+he (5): 0.808
+gray (5): 0.7959999999999999
+canny is missing
+
+full dataset, photo_sleuth

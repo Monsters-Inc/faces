@@ -264,6 +264,8 @@ def get_no_age(image_folder, destination_folder, df, size, logging):
         resized_img = cv2.resize(img, size)
         cv2.imwrite(destination_folder+df_no_ages['gender'].values[i]+image, resized_img)
 
+#get_no_age('dataset/', 'dataset_no_age/', '../data/full_dataset.csv', (96, 96), True)
+
 #
 # Takes out every person without an age
 #
@@ -305,8 +307,6 @@ def grayscale(image_folder, destination_folder, logging):
                 count += 1
             grayscale_img = cv2.imread(image_folder+image, 0)
             cv2.imwrite(destination_folder+image, grayscale_img)
-
-#grayscale('equal_dataset_96', 'equal_dataset_96_grayscale', True)
 
 def median_filtering_single(img):
     return cv2.medianBlur(img, 7)
