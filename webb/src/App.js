@@ -5,8 +5,6 @@ import { RotateCircleLoading } from 'react-loadingg';
 import { Row, Col } from 'react-grid-system';
 import { CSVLink } from "react-csv";
 
-
-
 function App() {
   const [images, setImages] = useState([])
   const [noFaceImages, setNoFaceImages] = useState([])
@@ -15,10 +13,10 @@ function App() {
   const [isImage, setIsImage] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [showPredict, setShowPredict] = useState(false)
-  const [showLink, setShowLink] = useState(false)
+  const [isDone, setIsDone] = useState(false)
 
   const multipleFilesOnChange = (event) => {
-    setShowLink(false)
+    setIsDone(false)
     setNoFaceImages([])
     setPrediction([])
     setImages(event.target.files)
@@ -74,7 +72,7 @@ function App() {
   }, []);
     setPrediction(final_pred)
     setIsLoading(false)
-    setShowLink(true)
+    setIsDone(true)
   }
 
   let invalidRows = []
@@ -94,8 +92,6 @@ function App() {
     <p className="warning">A file you chose is not an image, try again.</p>
     </> 
 
-  
-
 return (  
 
   <div className="App">
@@ -112,14 +108,34 @@ return (
         :
         null
     }
-  <div className="description">Number of images uploaded: {images.length}</div>
-  <div className="description">Number of faces detected: {prediction.length}</div>
-    
-    <p/>
+  {isDone && <div className="description">Number of images uploaded: {images.length}</div>}
+  {isDone && <div className="description">Number of faces detected: {prediction.length}</div>}
 
-    {showLink && 
+  {!isDone && <Row className='row'>
+    <Col xs= {7}><label className="custom-file-upload">
+      <input type="file" multiple name="file" className="input" onChange={multipleFilesOnChange} />
+        Upload Images
+    </label>
+    </Col>
+    <Col>
+    <div className="fileChecker">{images.length > 0 ? images.length : 'No'} file{images.length > 1 ? 's' : ''} uploaded</div>
+    </Col>
+    </Row>  
+  }
+  {!isDone &&  <div className="info">
+    This application predicts the gender and age of people in, primarily, historical photographs. Please upload 
+    one or multiple images for analysis. 
+    <br /> 
+    <br />
+    Good luck!
+  </div>
+  } 
+
+{isDone && <CSVLink className="csv_link" filename="predictions.csv" data={csvData}><button className="csvButton">Download Results (.csv)</button></CSVLink>}
+
+{isDone && 
     <>
-      <div className="description">Prediction:</div>
+      <div className="prediction">Prediction:</div>
       <Row>
         <Col><strong>Image</strong></Col>
         <Col><strong>Age</strong></Col>
@@ -127,28 +143,27 @@ return (
       </Row>
     </>
     }
-    {showLink && prediction.map((row, index) => ( 
+    {isDone && prediction.map((row, index) => ( 
       <Row key={index}>
         <Col>{row[0]}</Col>
         <Col>{row[1]}</Col>
         <Col>{row[2]}</Col>
       </Row>
     ))}
-{showLink && <p />}
+{isDone && <p />}
 
-  {showLink && noFaceImages.length !== 0 && <div className="description"><strong>Faces could not be detected for:</strong></div>}
+  {isDone && noFaceImages.length !== 0 && <div className="description"><strong>Faces could not be detected for:</strong></div>}
   {noFaceImages.map((row, index) => ( 
   <Row key={index}>
   {row}
   </Row>
 ))}
   
-  {showLink && <p />}
+  {isDone && <p />}
 
-
-    <input type="file" multiple name="file" className="input" onChange={multipleFilesOnChange} />
     {showPredict ? <button onClick={sendMultipleImages} className="button">Predict</button> : <div></div>}
-    {showLink && <CSVLink className="csv_link" filename="predictions.csv" data={csvData}>Ladda ner</CSVLink>}
+   
+    
 
     </header>
   </div>

@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color:#15283e;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,20 +24,72 @@
   color: white;
 }
 
+.custom-file-upload {
+  border: 1px solid #ccc;
+  background-color:white;
+  font-weight: 300;
+  font-size: 20px;
+  color: black;
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
 .photo {
-  height: 400px;
-  width: 300px;
-  border: 5px solid white;
+  height: 300px;
+  border: 0.5px solid white;
+  margin-bottom: 30px;
   margin-top: 40px;
 }
+
+.row {
+  margin-bottom: 30px;
+  width: 400px;
+}
+
+.info {
+  width: 750px;
+  padding: 20px;
+  border: 0.5px solid white;
+  background-color: #1c487a;
+  margin-bottom: 30px;
+  font-weight: 200;
+}
+
+.description {
+  width: 750px;
+  font-weight: 200;
+}
+
+.fileChecker{
+  margin-left: -90px;
+  margin-top: 5px;
+  font-weight: 300;
+  font-size: 20px;
+}
+
 .button{
-background-color: white;
+  background-color: white;
   color: black;
   font-size: 20px;
   padding: 10px 60px;
   border-radius: 5px;
-  margin: 10px 0px;
+  margin-top: 20px;
   cursor: pointer;
+}
+
+.csvButton{
+    margin: 30px;
+    background-color: white;
+    color: black;
+    font-size: 20px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+input[type="file"] {
+  display: none;
 }
 
 .input {
@@ -52,9 +104,9 @@ background-color: white;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.description {
+.option {
   color:white;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 200;
 }
 
 .App-link {
