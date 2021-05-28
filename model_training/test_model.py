@@ -4,9 +4,9 @@ from tensorflow import keras
 from data import preprocess
 import numpy as np
 
-img_shape = (96, 96, 3)
-model_path = 'g_final_dataset_grayscale_testing.h5'
-preprocessing = ['gray']
+img_shape = (96, 96, 1)
+model_path = 'models/gender_final.h5'
+preprocessing = ['he']
 directory = ''
 
 arg = sys.argv
