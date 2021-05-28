@@ -9,30 +9,29 @@ from preprocessing_helpers import median_filtering_single, canny_edges_single, c
 #
 def get_faces(image, filename, wrong_path):
 
-  model=dlib.cnn_face_detection_model_v1('../../mmod_human_face_detector.dat')
-  faces=model(image)
+    model=dlib.cnn_face_detection_model_v1('../../mmod_human_face_detector.dat')
+    faces=model(image)
+    cropped=[]
 
-  if len(faces) == 0:
-      #print('------No face found')
-      cv2.imwrite(wrong_path+filename, image)
+    if len(faces) == 0:
+        cv2.imwrite(wrong_path+filename, image)
+    else:
 
-  cropped=[]
+        #for face in faces:
+        face = faces[0]
+        x=face.rect.left()
+        y=face.rect.top()
+        w=face.rect.right()
+        h=face.rect.bottom()
+        x=max(0, x)
+        y=max(0, y)
+        w=max(0, w)
+        h=max(0, h)
 
-  #for face in faces:
-  face = faces[0]
-  x=face.rect.left()
-  y=face.rect.top()
-  w=face.rect.right()
-  h=face.rect.bottom()
-  x=max(0, x)
-  y=max(0, y)
-  w=max(0, w)
-  h=max(0, h)
+        crop=image[y:h, x:w]
+        cropped.append(crop)
 
-  crop=image[y:h, x:w]
-  cropped.append(crop)
-
-  return cropped
+    return cropped
 
 #
 # Preprocess an image with 0 or more preprocessing methods
@@ -53,8 +52,9 @@ def preprocess(input_data, end_path, wrong_path, img_shape, preprocessing):
 
     for i, image in enumerate(images):
         cropped_faces = get_faces(image, filenames[i], wrong_path)
-        faces = faces + cropped_faces
-        #faces.append(cropped_faces)
+
+        if len(cropped_faces) != 0:
+            faces = faces + cropped_faces
 
     for i in range(len(faces)):
         faces[i] = cv2.resize(faces[i], (img_shape[0], img_shape[1]))

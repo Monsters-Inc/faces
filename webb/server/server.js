@@ -5,6 +5,8 @@ const cors = require("cors")
 const upload = multer({dest: "./uploads"})
 const fs = require("fs")
 const PORT = 4000
+const fileSystem = require('fs')
+const path = require('path');
 
 app.use(cors())
 app.use("/static", express.static("./uploads"))
@@ -29,7 +31,6 @@ app.get("/runPython", (req,res) => {
     const pyProg = spawn('python3', ['../../main.py'])//, req.query[0]]);
 
     pyProg.stderr.on('data', function(data) {
-        console.log('ERROR')
         console.log(data.toString())
     })
 
@@ -39,8 +40,6 @@ app.get("/runPython", (req,res) => {
         res.write(data);
         res.end()
     })
-
 })
-
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`))

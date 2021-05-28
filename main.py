@@ -43,7 +43,7 @@ for filename in os.listdir(dest_fldr):
 pictures_f = np.array(pictures)
 pictures_f_2 = pictures_f/255
 
-## DENNA SKA BYTAS UT MOT TVÅ NYA FÄRDIGTRÄNADE MODELLER, EN FÖR AGE OCH EN FÖR GENDER
+# Predicts for age and gender
 
 pred_gender = Model_g.predict(pictures_f_2)
 pred_age = Model_a.predict(pictures_f_2)
@@ -61,13 +61,12 @@ for i in range(len(pred_gender)):
     data.append([filenames[i], age, sex_f[sex]])
     
     final_prediction = [str(age),sex_f[sex]]
-
     res = res + filenames[i] + " " + final_prediction[0] + " " + final_prediction[1] + " "
  
 
 # Create the pandas DataFrame
 df = pd.DataFrame(data, columns = ['Image', 'Age', 'Gender'])
-df.to_csv('../public/pred.csv', sep = ';', index = False)
+df.to_csv('csv_files/pred.csv', sep = ';', index = False)
 
 # Creating the string to return 
 
