@@ -19,7 +19,7 @@ def get_images(paths, dir_path, image_shape, preprocessing, logging):
         if logging:
             print('Getting Images: '+image+' | ' +
                   str(count)+'/'+str(len(paths)), end='\r')
-        temp = cv2.imread(dir_path + image)
+        temp = cv2.imread(dir_path + image, 0)
         temp = cv2.resize(temp, (image_shape[0], image_shape[1]))
         temp = preprocess([temp], image_shape, preprocessing)
 

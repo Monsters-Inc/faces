@@ -5,30 +5,28 @@ from data import data_age, data_gender
 import numpy as np
 
 # Settings
-image_folder = "dataset_grayscale"
-full_dataset_folder = "dataset/"
+image_folder = "grayscale"
+full_dataset_folder = "../dataset/"
 dataset = "../data/full_dataset.csv"
 test_size = 0.25
 img_shape = (96, 96, 1)
 logging = False
-gender_model_save = 'g_final_dataset_grayscale_testing.h5'
+gender_model_save = 'g_final.h5'
 age_model_save = 'a_final.h5'
 batch_size = 64
 epochs = 300
 monitor = 'val_loss'
 augumentation = False
-preprocessing = ['gray']
+preprocessing = ['he']
 
 type_m = 'B'
 
 if len(sys.argv) > 1:
     type_m = sys.argv[1].upper()
 
-    if len(sys.argv) > 2:
-        preprocessing.append(sys.argv[2].lower())
-        gender_model_save = 'g_testing_'+sys.argv[2].lower()+'.h5'
-
-print(preprocessing)
+    #if len(sys.argv) > 2:
+        #preprocessing.append(sys.argv[2].lower())
+        #gender_model_save = 'g_testing_'+sys.argv[2].lower()+'.h5'
 
 # train gender model
 def gender():

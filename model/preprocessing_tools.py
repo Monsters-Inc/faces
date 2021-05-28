@@ -119,12 +119,11 @@ def resize_images(image_folder, destination_folder, size, logging):
     for image in images:
         if logging:
             print('Resizing: '+image+' | '+str(count)+'/'+str(len(images)))
-        img = cv2.imread(image_folder+image)
+        img = cv2.imread(image_folder+image, 0)
         resized_img = cv2.resize(img, size)
         cv2.imwrite(destination_folder+image, resized_img)
         count+=1
 
-#
 # Swap K and F with 1 and M with 0
 #
 def binarize_gender(df):
@@ -337,11 +336,6 @@ def median_filtering(image_folder, destination_folder, color, logging):
 def he_single(img):
   he_img = cv2.equalizeHist(img)
   return he_img
-
-
-img = cv2.imread('our_dataset/f1.jpg', 0)
-he = he_single(img)
-cv2.imwrite('our_dataset/f11.jpg', he)
 
 #
 # HE transform - Preprocess
