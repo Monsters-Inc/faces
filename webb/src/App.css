@@ -52,7 +52,7 @@
   padding: 20px;
   border: 0.5px solid white;
   background-color: #1c487a;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   font-weight: 200;
 }
 
@@ -76,10 +76,11 @@
   border-radius: 5px;
   margin-top: 20px;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .csvButton{
-    margin: 30px;
+    margin-bottom: 20px;
     background-color: white;
     color: black;
     font-size: 20px;
@@ -87,6 +88,28 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+.predictionWrapper{
+  border: 0.5px solid white;
+  background-color: #1c487a;
+  padding: 20px;
+  font-weight: 300;
+  width: 350px;
+  margin-bottom: 30px;
+}
+
+.notDetected{
+  border: 0.5px solid white;
+  background-color: #8a2026;
+  padding: 20px;
+  font-weight: 300;
+  width: 350px;
+  margin-bottom: 30px;
+}
+
+.headerNotDetected{
+  font-size: 20px;
+}
 
 input[type="file"] {
   display: none;
