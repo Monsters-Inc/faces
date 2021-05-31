@@ -45,7 +45,6 @@ def preprocess(input_data, end_path, wrong_path, img_shape, preprocessing):
 
     images = []
     for file in folder:
-        if not file.startswith("."):
             img = cv2.imread(input_data + file, 0)
             images.append(img)
 
@@ -78,6 +77,5 @@ def preprocess(input_data, end_path, wrong_path, img_shape, preprocessing):
     # Save the faces in end_path
     #print('Length faces: ', len(faces))
     for i, face in enumerate(faces):
-        if not filenames[i].startswith("."):
-            cv2.imwrite(end_path+filenames[i], face)
+        cv2.imwrite(end_path+filenames[i], face)
 

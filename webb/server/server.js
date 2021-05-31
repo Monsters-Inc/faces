@@ -5,8 +5,23 @@ const cors = require("cors")
 const upload = multer({dest: "./uploads"})
 const fs = require("fs")
 const PORT = 4000
-const fileSystem = require('fs')
 const path = require('path');
+
+const uploadsExists = fs.existsSync('./uploads');
+const preprocessedUploadsExists = fs.existsSync('./preprocessedUploads');
+const uploadsWithoutFaceExists = fs.existsSync('./uploadsWithoutFace');
+
+if(!uploadsExists){
+    fs.mkdirSync('./uploads')
+}
+
+if(!uploadsWithoutFaceExists){
+    fs.mkdirSync('./uploadsWithoutFace')
+}
+
+if(!preprocessedUploadsExists){
+    fs.mkdirSync('./preprocessedUploads')
+}
 
 app.use(cors())
 app.use("/static", express.static("./uploads"))
