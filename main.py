@@ -28,17 +28,19 @@ preprocess(fldr, dest_fldr, wrong_dest_fldr, img_shape, preprocessing_methods)
 # Creating array with names of the images where faces couldn't be found.
 filenames_no_face = []
 for filename in os.listdir(wrong_dest_fldr):
-    filenameWithoutSpaces = filename.replace(" ", "")
-    filenames_no_face.append(filenameWithoutSpaces)
+    if not filename.startswith("."):
+        filenameWithoutSpaces = filename.replace(" ", "")
+        filenames_no_face.append(filenameWithoutSpaces)
 
 # Creating list with the preprocessed pictures and list with the corresponding filenames  
 pictures = []
 filenames = []
 for filename in os.listdir(dest_fldr):
-    img = cv2.imread(dest_fldr+'/' + filename, 0)
-    pictures.append(img)
-    filenameWithoutSpaces = filename.replace(" ", "")
-    filenames.append(filenameWithoutSpaces)
+    if not filename.startswith("."):
+        img = cv2.imread(dest_fldr+'/' + filename, 0)
+        pictures.append(img)
+        filenameWithoutSpaces = filename.replace(" ", "")
+        filenames.append(filenameWithoutSpaces)
 
 pictures_f = np.array(pictures)
 pictures_f_2 = pictures_f/255
@@ -48,25 +50,16 @@ pictures_f_2 = pictures_f/255
 pred_gender = Model_g.predict(pictures_f_2)
 pred_age = Model_a.predict(pictures_f_2)
   
-# initialize list of lists
-data = []
-
 res = ""
 for i in range(len(pred_gender)):
     
     sex_f = ['Male','Female']
     age = int(pred_age[i])
     sex = int(np.argmax(pred_gender[i]))
-
-    data.append([filenames[i], age, sex_f[sex]])
     
     final_prediction = [str(age),sex_f[sex]]
     res = res + filenames[i] + " " + final_prediction[0] + " " + final_prediction[1] + " "
  
-
-# Create the pandas DataFrame
-df = pd.DataFrame(data, columns = ['Image', 'Age', 'Gender'])
-df.to_csv('csv_files/pred.csv', sep = ';', index = False)
 
 # Creating the string to return 
 
@@ -78,13 +71,16 @@ print(res)
 
 #Removing images
 for file in os.listdir('uploads'):
-    os.remove(os.path.join('uploads', file))
+    if not file.startswith("."):
+        os.remove(os.path.join('uploads', file))
 
 for file in os.listdir('preprocessedUploads'):
-    os.remove(os.path.join('preprocessedUploads', file))
+    if not file.startswith("."):
+        os.remove(os.path.join('preprocessedUploads', file))
 
 for file in os.listdir('uploadsWithoutFace'):
-    os.remove(os.path.join('uploadsWithoutFace', file))
+    if not file.startswith("."):
+        os.remove(os.path.join('uploadsWithoutFace', file))
 
 
 
