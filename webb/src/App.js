@@ -7,7 +7,7 @@ import { CSVLink } from "react-csv";
 
 function App() {
   const [images, setImages] = useState([])
-  const [noFaceImages, setWrongFaceImages] = useState([])
+  const [wrongFaceImages, setWrongFaceImages] = useState([])
   const [prediction, setPrediction] = useState([])
   const [upload, setUpload] = useState("https://pbs.twimg.com/profile_images/740272510420258817/sd2e6kJy_400x400.jpg")
   const [isImage, setIsImage] = useState(true)
@@ -81,12 +81,21 @@ function App() {
     setWrongFaceImages([])
     setPrediction([])
     setImages([])
-
     setUpload("https://pbs.twimg.com/profile_images/740272510420258817/sd2e6kJy_400x400.jpg")
   }
 
+  const cropFileName = filename => {
+    if (filename.length > 10) {
+      filename = filename.slice(0, 6) + "..."
+      return filename
+    }
+    else { 
+      return filename
+    }
+  }
+
   let invalidRows = []
-  noFaceImages.forEach(row => {
+  wrongFaceImages.forEach(row => {
     invalidRows.push([row, '-', '-'])
   })
 
@@ -152,10 +161,9 @@ function App() {
               <Col><strong>Age</strong></Col>
               <Col><strong>Gender</strong></Col>
             </Row>
-        
         {prediction.map((row, index) => (
           <Row key={index}>
-            <Col>{row[0]}</Col>
+            <Col>{cropFileName(row[0])}</Col>
             <Col>{row[1]}</Col>
             <Col>{row[2]}</Col>
           </Row>
@@ -163,8 +171,8 @@ function App() {
         </div>
         }
 
-        {isDone && noFaceImages.length !== 0 && <div className="notDetected"><strong className="headerNotDetected" >Faces could not be detected for:</strong>
-        {noFaceImages.map((row, index) => 
+        {isDone && wrongFaceImages.length !== 0 && <div className="notDetected"><strong className="headerNotDetected" >Faces could not be detected for:</strong>
+        {wrongFaceImages.map((row, index) => 
           <Row key={index}>
             <Col xs={12}>{row}</Col>
           </Row>
