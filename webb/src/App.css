@@ -109,6 +109,7 @@
 
 .headerNotDetected{
   font-size: 20px;
+  margin-bottom: 15px;
 }
 
 input[type="file"] {
