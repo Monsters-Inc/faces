@@ -151,7 +151,7 @@ function App() {
   </div>
         }
 
-        {isDone && <CSVLink className="csv_link" filename="predictions.csv" data={csvData}><button className="csvButton">Download Results (.csv)</button></CSVLink>}
+        {isDone && <CSVLink className="csv_link" filename="predictions.csv" data={csvData} separator={";"}><button className="csvButton">Download Results (.csv)</button></CSVLink>}
 
         {isDone &&
           <div className="predictionWrapper">

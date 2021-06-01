@@ -1,16 +1,7 @@
 import os
 import numpy as np
 import cv2
-import pandas as pd
-from sklearn.metrics import log_loss
 from tensorflow import keras
-from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.metrics import confusion_matrix 
-from sklearn.metrics import classification_report
-from sklearn.metrics import accuracy_score
-import sys
 from preprocessing import preprocess
 
 
