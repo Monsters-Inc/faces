@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Historical Faces  
 Classifying Age and Gender on Historical Photographs using Convolutional Neural Networks
 
@@ -23,3 +24,6 @@ A majority of the work have been made over Visual Studio Code Live Share and the
 
 
 
+=======
+# faces
+>>>>>>> training_cleanup

@@ -1,5 +1,14 @@
 # Add ignores here
+*~
+*.jpg
+*.jpeg
+*.png
+.vscode/
 pictures/
+full_dataset/
+data/full_dataset/
+*.h5
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
