@@ -1,0 +1,147 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color:#222e3b;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  background-color:white;
+  font-weight: 300;
+  font-size: 20px;
+  color: black;
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.photo {
+  height: 300px;
+  border: 0.5px solid white;
+  margin-bottom: 30px;
+  margin-top: 40px;
+}
+
+.row {
+  margin-bottom: 30px;
+  width: 400px;
+}
+
+.info {
+  width: 750px;
+  padding: 20px;
+  border: 0.5px solid white;
+  background-color: #1c487a;
+  margin-bottom: 10px;
+  font-weight: 200;
+}
+
+.description {
+  width: 750px;
+  font-weight: 200;
+}
+
+.fileChecker{
+  margin-left: -90px;
+  margin-top: 5px;
+  font-weight: 300;
+  font-size: 20px;
+}
+
+.button{
+  background-color: white;
+  color: black;
+  font-size: 20px;
+  padding: 10px 60px;
+  border-radius: 5px;
+  margin-top: 20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.csvButton{
+    margin-bottom: 20px;
+    background-color: white;
+    color: black;
+    font-size: 20px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+.predictionWrapper{
+  border: 0.5px solid white;
+  background-color: #1c487a;
+  padding: 20px;
+  font-weight: 300;
+  width: 350px;
+  margin-bottom: 30px;
+}
+
+.notDetected{
+  border: 0.5px solid white;
+  background-color: #8a2026;
+  padding: 20px;
+  font-weight: 300;
+  width: 350px;
+  margin-bottom: 30px;
+}
+
+.headerNotDetected{
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.input {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-left: 70px;
+}
+
+.warning {
+  color: red;
+  font-size: medium;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.option {
+  color:white;
+  font-weight: 200;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

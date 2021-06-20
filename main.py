@@ -1,22 +1,73 @@
-import os.path
-import pandas as pd # data
-import seaborn as sea # plotting
-import cv2 # image reading
-import sys
-
-#print('Input from React: ', str(sys.argv[1]))
-
-df = pd.read_csv('../data/dataset.csv', sep=';')
-
-person = df.loc[df['image'] == sys.argv[1]+'.jpg']
-gender = person['gender'].to_numpy()[0]
-print(gender)
+import os
+import numpy as np
+import cv2
+from tensorflow import keras
+from preprocessing import preprocess
 
 
+fldr = 'uploads/'
+dest_fldr = 'preprocessedUploads/'
+wrong_dest_fldr = 'uploadsWithoutFace/'
+Model_g = keras.models.load_model('../../model/g_final.h5')
+Model_a = keras.models.load_model('../../model/a_final.h5')
+preprocessing_methods = ['he']
+img_shape = (96, 96, 1)
+
+# Detects faces and preprocesses the images
+preprocess(fldr, dest_fldr, wrong_dest_fldr, img_shape, preprocessing_methods)
+
+# Creating array with names of the images where faces couldn't be found.
+filenames_no_face = []
+for filename in os.listdir(wrong_dest_fldr):
+    filenameWithoutSpaces = filename.replace(" ", "")
+    filenames_no_face.append(filenameWithoutSpaces)
+
+# Creating list with the preprocessed pictures and list with the corresponding filenames  
+pictures = []
+filenames = []
+for filename in os.listdir(dest_fldr): 
+    img = cv2.imread(dest_fldr+'/' + filename, 0)
+    pictures.append(img)
+    filenameWithoutSpaces = filename.replace(" ", "")
+    filenames.append(filenameWithoutSpaces)
+
+pictures_f = np.array(pictures)
+pictures_f_2 = pictures_f/255
+
+# Predicts for age and gender
+
+pred_gender = Model_g.predict(pictures_f_2)
+pred_age = Model_a.predict(pictures_f_2)
+  
+res = ""
+for i in range(len(pred_gender)):
+    
+    sex_f = ['Male','Female']
+    age = int(pred_age[i])
+    sex = int(np.argmax(pred_gender[i]))
+    
+    final_prediction = [str(age),sex_f[sex]]
+    res = res + filenames[i] + " " + final_prediction[0] + " " + final_prediction[1] + " "
+ 
+
+# Creating the string to return 
+
+res = res + '*' + " "
+for i in range(len(filenames_no_face)):
+    res = res + filenames_no_face[i] + " "
+
+print(res)
+
+#Removing images
+for file in os.listdir('uploads'):
+
+    os.remove(os.path.join('uploads', file))
+
+for file in os.listdir('preprocessedUploads'):
+    os.remove(os.path.join('preprocessedUploads', file))
+
+for file in os.listdir('uploadsWithoutFace'):
+    os.remove(os.path.join('uploadsWithoutFace', file))
 
 
-# import argparse
-# parser = argparse.ArgumentParser(description='To read a file sent to terminal?')
-# parser.add_argument('filename', type='String', help='the filename to review')
-# args = vars(parser.parse_args())
-# print(args)
+
