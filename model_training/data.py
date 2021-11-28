@@ -1,3 +1,5 @@
+#Functions for processing the traning data
+
 import os
 import cv2
 import numpy as np
@@ -6,7 +8,7 @@ import dlib
 from sklearn.model_selection import train_test_split
 from preprocessing_tools import format_folder_name, he_single, clahe_single, canny_edges_single, median_filtering_single
 
-face_detection_model_path = 'premade.dat'
+face_detection_model_path = 'face_detection_model/premade.dat'
 
 def get_images(filenames, dir_path, image_shape, logging):
     dir_path = format_folder_name(dir_path)

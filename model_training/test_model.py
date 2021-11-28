@@ -1,3 +1,5 @@
+#Script to test and evaluate the trained models
+
 import os
 import sys
 from tensorflow import keras

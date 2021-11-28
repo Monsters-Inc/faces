@@ -1,0 +1,7 @@
+###### Python Package Requirements ######
+tensorflow
+pandas
+cv2
+numpy
+dlib
+sklearn

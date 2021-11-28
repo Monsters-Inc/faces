@@ -1,3 +1,4 @@
+#Driver program for the image classification on the server
 import os
 import numpy as np
 import cv2
@@ -8,8 +9,8 @@ from preprocessing import preprocess
 fldr = 'uploads/'
 dest_fldr = 'preprocessedUploads/'
 wrong_dest_fldr = 'uploadsWithoutFace/'
-Model_g = keras.models.load_model('../../model/g_final.h5')
-Model_a = keras.models.load_model('../../model/a_final.h5')
+Model_g = keras.models.load_model('./model/g_final.h5')
+Model_a = keras.models.load_model('./model/a_final.h5')
 preprocessing_methods = ['he']
 img_shape = (96, 96, 1)
 

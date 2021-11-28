@@ -1,3 +1,5 @@
+#Tensorflow implementation of the gender model
+
 from tensorflow.keras.layers import Dropout, Flatten, Dense, MaxPooling2D, Conv2D, Input
 from tensorflow.keras.layers.experimental.preprocessing import Normalization
 from tensorflow.keras.models import Model
